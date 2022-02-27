@@ -7,7 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="orders" />
-        <module name="boughts" />
+        <module name="purchases" />
         <module name="supplies" />
         <module name="eureka" />
         <module name="gateway" />

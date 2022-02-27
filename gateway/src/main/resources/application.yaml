@@ -8,10 +8,10 @@ spring:
           enabled: 'true'
           lower-case-service-id: 'true'
       routes:
-      - id: boughts
-        uri: http://boughts
+      - id: purchases
+        uri: http://purchases
         predicates:
-          - Path=/boughts
+          - Path=/purchases
       - id: orders
         uri: http://orders
         predicates:

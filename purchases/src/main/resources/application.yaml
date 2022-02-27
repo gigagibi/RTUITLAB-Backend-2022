@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: purchases
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/rtu_buys
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: root
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+server:
+  port: 3501
