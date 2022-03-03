@@ -13,6 +13,7 @@
         <module>supplies</module>
         <module>eureka</module>
         <module>gateway</module>
+        <module>products</module>
     </modules>
     <build>
         <pluginManagement>

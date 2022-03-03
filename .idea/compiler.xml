@@ -21,6 +21,7 @@
         <module name="supplies" />
         <module name="gateway" />
         <module name="eureka" />
+        <module name="products" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -33,6 +34,7 @@
       <module name="eureka" options="-Amapstruct.defaultComponentModel=spring" />
       <module name="gateway" options="-Amapstruct.defaultComponentModel=spring" />
       <module name="orders" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="products" options="-Amapstruct.defaultComponentModel=spring" />
       <module name="supplies" options="-Amapstruct.defaultComponentModel=spring" />
     </option>
   </component>
