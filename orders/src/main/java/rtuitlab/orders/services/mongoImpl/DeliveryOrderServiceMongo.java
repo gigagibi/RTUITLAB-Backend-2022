@@ -6,6 +6,7 @@ import rtuitlab.orders.dto.deliveryOrder.GetDeliveryOrderDTO;
 import rtuitlab.orders.dto.deliveryOrder.PostDeliveryOrderDTO;
 import rtuitlab.orders.dto.deliveryOrder.PutDeliveryOrderDTO;
 import rtuitlab.orders.exceptions.DeliveryOrderNotFoundException;
+import rtuitlab.orders.exceptions.OrderNotFoundException;
 import rtuitlab.orders.models.DeliveryOrder;
 import rtuitlab.orders.repositories.DeliveryOrderRepository;
 import rtuitlab.orders.services.DeliveryOrderService;
@@ -37,7 +38,9 @@ public class DeliveryOrderServiceMongo implements DeliveryOrderService {
     }
 
     @Override
-    public List<GetDeliveryOrderDTO> deleteById(int id) {
+    public List<GetDeliveryOrderDTO> deleteById(int id) throws OrderNotFoundException {
+        if(deliveryOrderRepository.findById(id).isEmpty())
+            throw new OrderNotFoundException(id);
         deliveryOrderRepository.deleteById(id);
         return deliveryOrderRepository.findAll().stream().map(o -> deliveryOrderMapper.entityToDTO(o)).collect(Collectors.toList());
     }

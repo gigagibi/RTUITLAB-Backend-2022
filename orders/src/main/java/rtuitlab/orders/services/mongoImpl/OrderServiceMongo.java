@@ -37,7 +37,9 @@ public class OrderServiceMongo implements OrderService {
     }
 
     @Override
-    public List<GetOrderDTO> deleteById(int id) {
+    public List<GetOrderDTO> deleteById(int id) throws OrderNotFoundException {
+        if(orderRepository.findById(id).isEmpty())
+            throw new OrderNotFoundException(id);
         orderRepository.deleteById(id);
         return orderRepository.findAll().stream().map(o -> orderMapper.entityToDTO(o)).collect(Collectors.toList());
     }
