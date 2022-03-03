@@ -15,7 +15,7 @@ public interface DeliveryOrderService {
 
     List<GetDeliveryOrderDTO> create(PostDeliveryOrderDTO order);
 
-    List<GetDeliveryOrderDTO> deleteById(int id) throws OrderNotFoundException;
+    List<GetDeliveryOrderDTO> deleteById(int id) throws DeliveryOrderNotFoundException;
 
     GetDeliveryOrderDTO update(int id, PutDeliveryOrderDTO order) throws DeliveryOrderNotFoundException;
 }
