@@ -38,9 +38,9 @@ public class DeliveryOrderServiceMongo implements DeliveryOrderService {
     }
 
     @Override
-    public List<GetDeliveryOrderDTO> deleteById(int id) throws OrderNotFoundException {
+    public List<GetDeliveryOrderDTO> deleteById(int id) throws DeliveryOrderNotFoundException {
         if(deliveryOrderRepository.findById(id).isEmpty())
-            throw new OrderNotFoundException(id);
+            throw new DeliveryOrderNotFoundException(id);
         deliveryOrderRepository.deleteById(id);
         return deliveryOrderRepository.findAll().stream().map(o -> deliveryOrderMapper.entityToDTO(o)).collect(Collectors.toList());
     }
