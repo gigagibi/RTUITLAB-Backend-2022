@@ -1,6 +1,7 @@
 package rtuitlab.orders.controllers;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -9,6 +10,7 @@ import rtuitlab.orders.dto.order.PostOrderDTO;
 import rtuitlab.orders.dto.order.PutOrderDTO;
 import rtuitlab.orders.exceptions.OrderNotFoundException;
 import rtuitlab.orders.services.OrderService;
+import rtuitlab.orders.services.mongoImpl.OrderServiceMongo;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/order")
 public class OrderController {
-    private OrderService orderService;
+    private OrderServiceMongo orderService;
 
     @GetMapping("/")
     public List<GetOrderDTO> getOrders(){
@@ -24,7 +26,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public GetOrderDTO getOrder(@PathVariable int id) {
+    public GetOrderDTO getOrder(@PathVariable String id) {
         try {
             return orderService.getById(id);
         }
@@ -39,7 +41,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public GetOrderDTO updateOrder(@PathVariable int id, @RequestBody PutOrderDTO putOrderDTO) {
+    public GetOrderDTO updateOrder(@PathVariable String id, @RequestBody PutOrderDTO putOrderDTO) {
         try {
             return orderService.update(id, putOrderDTO);
         }
@@ -49,7 +51,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public List<GetOrderDTO> deleteOrder(@PathVariable int id) {
+    public List<GetOrderDTO> deleteOrder(@PathVariable String id) {
         try {
             return orderService.deleteById(id);
         }

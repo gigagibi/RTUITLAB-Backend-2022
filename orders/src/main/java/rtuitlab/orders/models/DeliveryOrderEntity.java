@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Document
@@ -15,13 +15,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryOrder {
+public class DeliveryOrderEntity {
     @Id
-    private Integer id;
+    private String id;
     private Integer number;
     private Integer cost;
-    private List<Integer> productsIds;
-    private OffsetDateTime orderDate;
+    private List<BoughtProductInfo> products;
+    private Date orderDate;
     private String address;
     private String phone;
 }

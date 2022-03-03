@@ -1,17 +1,19 @@
 package rtuitlab.orders.services.mongoImpl;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rtuitlab.orders.dto.deliveryOrder.GetDeliveryOrderDTO;
 import rtuitlab.orders.dto.deliveryOrder.PostDeliveryOrderDTO;
 import rtuitlab.orders.dto.deliveryOrder.PutDeliveryOrderDTO;
 import rtuitlab.orders.exceptions.DeliveryOrderNotFoundException;
-import rtuitlab.orders.exceptions.OrderNotFoundException;
-import rtuitlab.orders.models.DeliveryOrder;
+import rtuitlab.orders.models.DeliveryOrderEntity;
+import rtuitlab.orders.models.OrderEntity;
 import rtuitlab.orders.repositories.DeliveryOrderRepository;
 import rtuitlab.orders.services.DeliveryOrderService;
 import rtuitlab.orders.mappers.DeliveryOrderMapper;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,19 +28,21 @@ public class DeliveryOrderServiceMongo implements DeliveryOrderService {
     }
 
     @Override
-    public GetDeliveryOrderDTO getById(int id) throws DeliveryOrderNotFoundException {
-        DeliveryOrder deliveryOrder = deliveryOrderRepository.findById(id).orElseThrow(() -> new DeliveryOrderNotFoundException(id));
-        return deliveryOrderMapper.entityToDTO(deliveryOrder);
+    public GetDeliveryOrderDTO getById(String id) throws DeliveryOrderNotFoundException {
+        DeliveryOrderEntity deliveryOrderEntity = deliveryOrderRepository.findById(id).orElseThrow(() -> new DeliveryOrderNotFoundException(id));
+        return deliveryOrderMapper.entityToDTO(deliveryOrderEntity);
     }
 
     @Override
     public List<GetDeliveryOrderDTO> create(PostDeliveryOrderDTO deliveryOrder) {
-        deliveryOrderRepository.save(deliveryOrderMapper.postDTOToEntity(deliveryOrder));
+        DeliveryOrderEntity deliveryOrderEntity = deliveryOrderMapper.postDTOToEntity(deliveryOrder);
+        deliveryOrderEntity.setOrderDate(new Date());
+        deliveryOrderRepository.save(deliveryOrderEntity);
         return deliveryOrderRepository.findAll().stream().map(o -> deliveryOrderMapper.entityToDTO(o)).collect(Collectors.toList());
     }
 
     @Override
-    public List<GetDeliveryOrderDTO> deleteById(int id) throws DeliveryOrderNotFoundException {
+    public List<GetDeliveryOrderDTO> deleteById(String id) throws DeliveryOrderNotFoundException {
         if(deliveryOrderRepository.findById(id).isEmpty())
             throw new DeliveryOrderNotFoundException(id);
         deliveryOrderRepository.deleteById(id);
@@ -46,10 +50,11 @@ public class DeliveryOrderServiceMongo implements DeliveryOrderService {
     }
 
     @Override
-    public GetDeliveryOrderDTO update(int id, PutDeliveryOrderDTO deliveryOrder) throws DeliveryOrderNotFoundException {
-        DeliveryOrder newDeliveryOrder = deliveryOrderMapper.putDTOToEntity(deliveryOrder);
-        deliveryOrderRepository.save(newDeliveryOrder);
-        DeliveryOrder updatedDeliveryOrder = deliveryOrderRepository.findById(id).orElseThrow(() -> new DeliveryOrderNotFoundException(id));
-        return deliveryOrderMapper.entityToDTO(updatedDeliveryOrder);
+    public GetDeliveryOrderDTO update(String id, PutDeliveryOrderDTO deliveryOrder) throws DeliveryOrderNotFoundException {
+        DeliveryOrderEntity newDeliveryOrderEntity = deliveryOrderMapper.putDTOToEntity(deliveryOrder);
+        newDeliveryOrderEntity.setId(id);
+        deliveryOrderRepository.save(newDeliveryOrderEntity);
+        DeliveryOrderEntity updatedDeliveryOrderEntity = deliveryOrderRepository.findById(id).orElseThrow(() -> new DeliveryOrderNotFoundException(id));
+        return deliveryOrderMapper.entityToDTO(updatedDeliveryOrderEntity);
     }
 }

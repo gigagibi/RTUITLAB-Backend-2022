@@ -1,7 +1,7 @@
 package rtuitlab.orders.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import rtuitlab.orders.models.DeliveryOrder;
+import rtuitlab.orders.models.DeliveryOrderEntity;
 
-public interface DeliveryOrderRepository extends MongoRepository<DeliveryOrder, Integer> {
+public interface DeliveryOrderRepository extends MongoRepository<DeliveryOrderEntity, String> {
 }

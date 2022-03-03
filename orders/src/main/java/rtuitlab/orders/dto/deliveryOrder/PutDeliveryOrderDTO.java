@@ -3,8 +3,9 @@ package rtuitlab.orders.dto.deliveryOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rtuitlab.orders.models.BoughtProductInfo;
 
-import java.time.OffsetDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Data
@@ -13,8 +14,8 @@ import java.util.List;
 public class PutDeliveryOrderDTO {
     private Integer number;
     private Integer cost;
-    private List<Integer> productsIds;
-    private OffsetDateTime orderDate;
+    private List<BoughtProductInfo> products;
+    private ZonedDateTime orderDate;
     private String address;
     private String phone;
 }

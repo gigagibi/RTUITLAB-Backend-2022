@@ -24,7 +24,7 @@ public class DeliveryController {
     }
 
     @GetMapping("/{id}")
-    public GetDeliveryOrderDTO getDeliveryOrder(@PathVariable int id) {
+    public GetDeliveryOrderDTO getDeliveryOrder(@PathVariable String id) {
         try {
             return deliveryOrderService.getById(id);
         }
@@ -39,7 +39,7 @@ public class DeliveryController {
     }
 
     @PutMapping("/{id}")
-    public GetDeliveryOrderDTO updateDeliveryOrder(@PathVariable int id, @RequestBody PutDeliveryOrderDTO putDeliveryOrderDTO) {
+    public GetDeliveryOrderDTO updateDeliveryOrder(@PathVariable String id, @RequestBody PutDeliveryOrderDTO putDeliveryOrderDTO) {
         try {
             return deliveryOrderService.update(id, putDeliveryOrderDTO);
         }
@@ -49,7 +49,7 @@ public class DeliveryController {
     }
 
     @DeleteMapping("/{id}")
-    public List<GetDeliveryOrderDTO> deleteDeliveryOrder(@PathVariable int id) {
+    public List<GetDeliveryOrderDTO> deleteDeliveryOrder(@PathVariable String id) {
         try {
             return deliveryOrderService.deleteById(id);
         }
