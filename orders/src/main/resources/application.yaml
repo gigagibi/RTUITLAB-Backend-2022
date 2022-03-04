@@ -6,7 +6,7 @@ spring:
       auto-index-creation: true
       host: localhost
       port: 27017
-      database: orders
+      database: rtu_orders
       username: root
       password: root
       authentication-database: admin

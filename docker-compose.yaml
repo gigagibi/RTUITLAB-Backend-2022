@@ -37,7 +37,7 @@ services:
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
   supplies_mongo_express:
     image: mongo-express
-    container_name: supplies-mongo_express
+    container_name: supplies_mongo_express
     restart: always
     depends_on:
       - supplies_mongodb
@@ -49,6 +49,18 @@ services:
       - ME_CONFIG_MONGODB_SERVER=supplies_mongodb
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       - ME_CONFIG_MONGODB_PORT=27017
+  products_postgresdb:
+    image: postgres
+    container_name: products_postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - products_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=rtu_products
 volumes:
   orders_data:
   supplies_data:
+  products_data:

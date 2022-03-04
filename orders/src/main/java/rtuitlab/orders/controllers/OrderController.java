@@ -18,7 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @RequestMapping("/api/order")
 public class OrderController {
-    private OrderServiceMongo orderService;
+    private OrderService orderService;
 
     @GetMapping("/")
     public List<GetOrderDTO> getOrders(){

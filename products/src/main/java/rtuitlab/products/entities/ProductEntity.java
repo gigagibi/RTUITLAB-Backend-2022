@@ -1,6 +1,5 @@
 package rtuitlab.products.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,11 +8,12 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "product")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product {
+public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
@@ -32,5 +32,5 @@ public class Product {
     private String imagePath;
 
     @ManyToOne
-    private Category category;
+    private CategoryEntity categoryEntity;
 }
