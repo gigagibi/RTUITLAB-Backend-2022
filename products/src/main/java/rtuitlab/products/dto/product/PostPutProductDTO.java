@@ -10,7 +10,7 @@ import rtuitlab.products.dto.category.GetCategoryDTO;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostPutCategoryDTO {
+public class PostPutProductDTO {
     private Integer id;
     private String name;
     private Integer cost;
