@@ -35,8 +35,10 @@ public class ProductServiceJPA implements ProductService {
     @Override
     public List<PostedPutProductDTO> create(PostPutProductDTO postProductDTO) {
         ProductEntity productEntity = productMapper.postPutDTOToEntity(postProductDTO);
-        productRepository.save(productEntity);
-        return productRepository.findAll().stream().map(c -> productMapper.entityToSavedDTO(c)).collect(Collectors.toList());
+        productEntity.setCategoryEntity(categoryRepository.getById(postProductDTO.getCategory().getId()));
+        productRepository.saveAndFlush(productEntity);
+        List<ProductEntity> productEntities = productRepository.findAll();
+        return productEntities.stream().map(c -> productMapper.entityToSavedDTO(c)).collect(Collectors.toList());
     }
 
     @Override
