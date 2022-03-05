@@ -7,7 +7,7 @@ import rtuitlab.orders.dto.order.PostOrderDTO;
 import rtuitlab.orders.dto.order.PutOrderDTO;
 import rtuitlab.orders.exceptions.OrderNotFoundException;
 import rtuitlab.orders.mappers.OrderMapper;
-import rtuitlab.orders.models.OrderEntity;
+import rtuitlab.orders.models.documents.OrderDocument;
 import rtuitlab.orders.repositories.OrderRepository;
 import rtuitlab.orders.services.OrderService;
 
@@ -27,15 +27,15 @@ public class OrderServiceMongo implements OrderService {
 
     @Override
     public GetOrderDTO getById(String id) throws OrderNotFoundException {
-        OrderEntity orderEntity = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-        return orderMapper.entityToDTO(orderEntity);
+        OrderDocument orderDocument = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+        return orderMapper.entityToDTO(orderDocument);
     }
 
     @Override
     public List<GetOrderDTO> create(PostOrderDTO order) {
-        OrderEntity orderEntity = orderMapper.postDTOToEntity(order);
-        orderEntity.setOrderDate(new Date());
-        orderRepository.save(orderEntity);
+        OrderDocument orderDocument = orderMapper.postDTOToEntity(order);
+        orderDocument.setOrderDate(new Date());
+        orderRepository.save(orderDocument);
         return orderRepository.findAll().stream().map(o -> orderMapper.entityToDTO(o)).collect(Collectors.toList());
     }
 
@@ -49,10 +49,10 @@ public class OrderServiceMongo implements OrderService {
 
     @Override
     public GetOrderDTO update(String id, PutOrderDTO order) throws OrderNotFoundException {
-        OrderEntity newOrderEntity = orderMapper.putDTOToEntity(order);
-        newOrderEntity.setId(id);
-        orderRepository.save(newOrderEntity);
-        OrderEntity updatedOrderEntity = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
-        return orderMapper.entityToDTO(updatedOrderEntity);
+        OrderDocument newOrderDocument = orderMapper.putDTOToEntity(order);
+        newOrderDocument.setId(id);
+        orderRepository.save(newOrderDocument);
+        OrderDocument updatedOrderDocument = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
+        return orderMapper.entityToDTO(updatedOrderDocument);
     }
 }

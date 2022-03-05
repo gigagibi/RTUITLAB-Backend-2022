@@ -1,7 +1,6 @@
 package rtuitlab.orders.controllers;
 
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -10,7 +9,6 @@ import rtuitlab.orders.dto.order.PostOrderDTO;
 import rtuitlab.orders.dto.order.PutOrderDTO;
 import rtuitlab.orders.exceptions.OrderNotFoundException;
 import rtuitlab.orders.services.OrderService;
-import rtuitlab.orders.services.mongoImpl.OrderServiceMongo;
 
 import java.util.List;
 
