@@ -6,7 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductInfo {
+public class SupplyProductInfo {
     private String name;
     private String description;
     private Integer amount;
