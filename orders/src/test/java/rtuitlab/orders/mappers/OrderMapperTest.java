@@ -2,8 +2,6 @@ package rtuitlab.orders.mappers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import rtuitlab.orders.dto.order.GetOrderDTO;
 import rtuitlab.orders.dto.order.PostOrderDTO;
 import rtuitlab.orders.dto.order.PutOrderDTO;
@@ -15,9 +13,8 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
+
 class OrderMapperTest {
     private OrderMapperImpl underTest;
 

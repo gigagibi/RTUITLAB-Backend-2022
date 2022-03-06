@@ -65,7 +65,12 @@ class OrderServiceMongoTest {
 
     @Test
     void getAll() {
+        // arrange (no given arrange)
+
+        // act
         underTest.getAll();
+
+        // assert
         verify(orderRepository).findAll();
 //        verify(orderMapper, atLeastOnce()).entityToDTO(any()); dont work because method is invoked in stream. Need to figure it out
     }

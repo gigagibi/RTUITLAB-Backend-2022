@@ -16,7 +16,6 @@ import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ExtendWith(MockitoExtension.class)
 class DeliveryOrderMapperTest {
     private DeliveryOrderMapperImpl underTest;
 
