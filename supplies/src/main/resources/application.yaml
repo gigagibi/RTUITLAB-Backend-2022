@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: supplies
+  data:
+    mongodb:
+      auto-index-creation: true
+      host: localhost
+      port: 27018
+      database: rtu_supplies
+      username: root
+      password: root
+      authentication-database: admin
+eureka:
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+server:
+  port: 3503

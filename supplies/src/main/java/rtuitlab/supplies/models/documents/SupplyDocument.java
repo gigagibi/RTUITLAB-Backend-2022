@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.models.SupplyProductInfo;
 
 import java.util.Date;
@@ -16,9 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SupplyDocument {
-    @Id
-    private String id;
+public class SupplyDocument extends AbstractDocument {
     private String supplier_id;
     private Date supplyDate;
     List<SupplyProductInfo> supplyProductInfos;
