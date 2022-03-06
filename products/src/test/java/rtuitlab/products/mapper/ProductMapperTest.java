@@ -8,7 +8,7 @@ import rtuitlab.products.dto.product.PostPutProductDTO;
 import rtuitlab.products.dto.product.PostedPutProductDTO;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
-import rtuitlab.products.mapper.nonTest.ExtendedProductMapper;
+import rtuitlab.products.mapper.notTest.ExtendedProductMapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

@@ -2,7 +2,7 @@ package rtuitlab.products.services;
 
 import rtuitlab.products.dto.category.GetCategoryDTO;
 import rtuitlab.products.dto.category.PostPutCategoryDTO;
-import rtuitlab.products.exception.CategoryNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
 
 import java.util.List;
 

@@ -1,17 +1,14 @@
 package rtuitlab.products.services.jpaImpl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import rtuitlab.products.dto.category.GetCategoryDTO;
 import rtuitlab.products.dto.category.PostPutCategoryDTO;
-import rtuitlab.products.dto.category.SetCategoryDTO;
 import rtuitlab.products.entities.CategoryEntity;
-import rtuitlab.products.exception.CategoryNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
 import rtuitlab.products.mapper.CategoryMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 

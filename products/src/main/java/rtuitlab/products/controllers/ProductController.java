@@ -7,7 +7,10 @@ import org.springframework.web.server.ResponseStatusException;
 import rtuitlab.products.dto.product.GetProductDTO;
 import rtuitlab.products.dto.product.PostPutProductDTO;
 import rtuitlab.products.dto.product.PostedPutProductDTO;
-import rtuitlab.products.exception.ProductNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenCategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenNameNotFoundException;
 import rtuitlab.products.services.ProductService;
 
 import javax.imageio.ImageIO;
@@ -15,7 +18,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 @RestController
@@ -46,6 +48,24 @@ public class ProductController {
             ImageIO.write(bImage, "png", bos );
             return bos.toByteArray();
         } catch (ProductNotFoundException | IOException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/withCategory/{id}")
+    private List<GetProductDTO> getProductsByCategoryId(@PathVariable int id) {
+        try {
+            return productService.getByCategoryId(id);
+        } catch (CategoryNotFoundException | ProductWithGivenCategoryNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
+    @GetMapping("/withName/{name}")
+    private GetProductDTO getProductsByName(@PathVariable String name) {
+        try {
+            return productService.getByName(name);
+        } catch (ProductWithGivenNameNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

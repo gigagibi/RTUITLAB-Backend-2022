@@ -1,4 +1,4 @@
-package rtuitlab.products.mapper.nonTest;
+package rtuitlab.products.mapper.notTest;
 
 import rtuitlab.products.dto.product.GetProductDTO;
 import rtuitlab.products.dto.product.PostPutProductDTO;

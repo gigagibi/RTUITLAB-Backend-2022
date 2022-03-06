@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import rtuitlab.products.dto.category.GetCategoryDTO;
 import rtuitlab.products.dto.category.PostPutCategoryDTO;
 import rtuitlab.products.entities.CategoryEntity;
-import rtuitlab.products.exception.CategoryNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
 import rtuitlab.products.mapper.CategoryMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.services.CategoryService;

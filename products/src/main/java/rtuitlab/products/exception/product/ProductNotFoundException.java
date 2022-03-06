@@ -1,4 +1,4 @@
-package rtuitlab.products.exception;
+package rtuitlab.products.exception.product;
 
 import java.text.MessageFormat;
 

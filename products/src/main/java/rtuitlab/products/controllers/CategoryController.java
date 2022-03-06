@@ -7,11 +7,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import rtuitlab.products.dto.category.GetCategoryDTO;
 import rtuitlab.products.dto.category.PostPutCategoryDTO;
-import rtuitlab.products.entities.ProductEntity;
-import rtuitlab.products.exception.CategoryNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
 import rtuitlab.products.services.CategoryService;
 
-import java.io.InputStream;
 import java.util.List;
 
 @RestController

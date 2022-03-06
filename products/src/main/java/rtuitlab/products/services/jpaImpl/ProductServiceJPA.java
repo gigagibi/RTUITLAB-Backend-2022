@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import rtuitlab.products.dto.product.GetProductDTO;
 import rtuitlab.products.dto.product.PostPutProductDTO;
 import rtuitlab.products.dto.product.PostedPutProductDTO;
+import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
-import rtuitlab.products.exception.ProductNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenCategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenNameNotFoundException;
 import rtuitlab.products.mapper.ProductMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.repositories.ProductRepository;
@@ -70,5 +74,22 @@ public class ProductServiceJPA implements ProductService {
         if(productRepository.findById(id).isEmpty())
             throw new ProductNotFoundException(id);
         return productRepository.getById(id).getImagePath();
+    }
+
+    @Override
+    public List<GetProductDTO> getByCategoryId(int id) throws CategoryNotFoundException, ProductWithGivenCategoryNotFoundException {
+        CategoryEntity categoryEntity = categoryRepository.findById(id).orElseThrow(() -> new CategoryNotFoundException(id));
+        List<ProductEntity> productEntities = productRepository.findAllByCategoryEntity(categoryEntity);
+        if (productEntities.isEmpty())
+            throw new ProductWithGivenCategoryNotFoundException(categoryEntity.getId());
+        return productEntities.stream().map(p -> productMapper.entityToDTO(p)).collect(Collectors.toList());
+    }
+
+    @Override
+    public GetProductDTO getByName(String name) throws ProductWithGivenNameNotFoundException {
+        ProductEntity productEntity = productRepository.findByName(name);
+        if(productEntity==null)
+            throw new ProductWithGivenNameNotFoundException(name);
+        return productMapper.entityToDTO(productEntity);
     }
 }

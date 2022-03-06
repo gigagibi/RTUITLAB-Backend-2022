@@ -10,14 +10,19 @@ import rtuitlab.products.dto.category.SetCategoryDTO;
 import rtuitlab.products.dto.product.PostPutProductDTO;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
-import rtuitlab.products.exception.ProductNotFoundException;
+import rtuitlab.products.exception.category.CategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenCategoryNotFoundException;
+import rtuitlab.products.exception.product.ProductWithGivenNameNotFoundException;
 import rtuitlab.products.mapper.ProductMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.repositories.ProductRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.filter;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -32,13 +37,13 @@ class ProductServiceJPATest {
 
     private ProductEntity testProductEntity;
     private PostPutProductDTO testPostPutProductDTO;
-    private CategoryEntity categoryEntity;
+    private CategoryEntity testCategoryEntity;
 
     @BeforeEach
     void setUp() {
         underTest = new ProductServiceJPA(productRepository, categoryRepository, productMapper);
-        categoryEntity = new CategoryEntity(1, "category");
-        testProductEntity = new ProductEntity(1, "product", 100, "desc", "/path", categoryEntity);
+        testCategoryEntity = new CategoryEntity(1, "category");
+        testProductEntity = new ProductEntity(1, "product", 100, "desc", "/path", testCategoryEntity);
         SetCategoryDTO setCategoryDTO = new SetCategoryDTO(1);
         testPostPutProductDTO = new PostPutProductDTO("product", 100, "desc", "/path", setCategoryDTO);
     }
@@ -76,7 +81,7 @@ class ProductServiceJPATest {
         given(productMapper.postPutDTOToEntity(testPostPutProductDTO))
                 .willReturn(testProductEntity);
         given(categoryRepository.getById(testPostPutProductDTO.getCategory().getId()))
-                .willReturn(categoryEntity);
+                .willReturn(testCategoryEntity);
 
         // act
         underTest.create(testPostPutProductDTO);
@@ -128,7 +133,7 @@ class ProductServiceJPATest {
     }
 
     @Test
-    void shouldDeleteAllCategories() {
+    void shouldDeleteAllProducts() {
         // arrange (no given arrange)
 
         // act
@@ -136,5 +141,41 @@ class ProductServiceJPATest {
 
         // assert
         verify(productRepository).deleteAll();
+    }
+
+    @Test
+    void shouldGetProductByCategoryId() throws CategoryNotFoundException, ProductWithGivenCategoryNotFoundException {
+        // arrange
+        Integer categoryId = testCategoryEntity.getId();
+        given(categoryRepository.findById(categoryId))
+                .willReturn(Optional.of(testCategoryEntity));
+        given(productRepository.findAllByCategoryEntity(testCategoryEntity))
+                .willReturn(List.of(testProductEntity));
+
+        // act
+        underTest.getByCategoryId(categoryId);
+
+        // assert
+        ArgumentCaptor<CategoryEntity> categoryEntityArgumentCaptor = ArgumentCaptor.forClass(CategoryEntity.class);
+        verify(productRepository).findAllByCategoryEntity(categoryEntityArgumentCaptor.capture());
+        CategoryEntity capturedCategoryEntity = categoryEntityArgumentCaptor.getValue();
+        assertThat(capturedCategoryEntity.getId()).isEqualTo(categoryId);
+    }
+
+    @Test
+    void shouldGetProductByName() throws ProductWithGivenNameNotFoundException {
+        // arrange
+        String name = testProductEntity.getName();
+        given(productRepository.findByName(name))
+                .willReturn(testProductEntity);
+
+        // act
+        underTest.getByName(name);
+
+        // assert
+        ArgumentCaptor<String> nameArgumentCaptor = ArgumentCaptor.forClass(String.class);
+        verify(productRepository).findByName(nameArgumentCaptor.capture());
+        String capturedName = nameArgumentCaptor.getValue();
+        assertThat(name).isEqualTo(capturedName);
     }
 }
