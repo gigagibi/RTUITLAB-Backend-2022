@@ -19,5 +19,4 @@ public interface ProductMapper {
 
     @Mapping(source = "productEntity.categoryEntity", target = "category")
     PostedPutProductDTO entityToSavedDTO(ProductEntity productEntity);
-
 }
