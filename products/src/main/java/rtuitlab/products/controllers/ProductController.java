@@ -47,10 +47,7 @@ public class ProductController {
     @ApiOperation(value = "get image of the products as byte array", produces = "application/octet-stream")
     private byte[] getProductImage(@PathVariable int id) {
         try {
-            BufferedImage bImage = ImageIO.read(new File(productService.getImagePath(id)));
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ImageIO.write(bImage, "png", bos );
-            return bos.toByteArray();
+            return productService.getImageByProductId(id);
         } catch (ProductNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         } catch (IOException e) {

@@ -1,4 +1,4 @@
-package rtuitlab.products.mapper;
+package rtuitlab.products.unit.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,7 +8,8 @@ import rtuitlab.products.dto.product.PostPutProductDTO;
 import rtuitlab.products.dto.product.PostedPutProductDTO;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
-import rtuitlab.products.mapper.notTest.ExtendedProductMapper;
+import rtuitlab.products.mapper.CategoryMapperImpl;
+import rtuitlab.products.unit.mapper.notTest.ExtendedProductMapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

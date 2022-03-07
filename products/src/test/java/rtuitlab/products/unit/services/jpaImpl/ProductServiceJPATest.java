@@ -1,4 +1,4 @@
-package rtuitlab.products.services.jpaImpl;
+package rtuitlab.products.unit.services.jpaImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,12 +17,14 @@ import rtuitlab.products.exception.product.ProductWithGivenNameNotFoundException
 import rtuitlab.products.mapper.ProductMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.repositories.ProductRepository;
+import rtuitlab.products.services.jpaImpl.ProductServiceJPA;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.filter;
+import static org.assertj.core.api.AssertionsForClassTypes.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -43,9 +45,9 @@ class ProductServiceJPATest {
     void setUp() {
         underTest = new ProductServiceJPA(productRepository, categoryRepository, productMapper);
         testCategoryEntity = new CategoryEntity(1, "category");
-        testProductEntity = new ProductEntity(1, "product", 100, "desc", "/path", testCategoryEntity);
+        testProductEntity = new ProductEntity(1, "product", 100, "desc", "src/test/resources/images/image_test.png", testCategoryEntity);
         SetCategoryDTO setCategoryDTO = new SetCategoryDTO(1);
-        testPostPutProductDTO = new PostPutProductDTO("product", 100, "desc", "/path", setCategoryDTO);
+        testPostPutProductDTO = new PostPutProductDTO("product", 100, "desc", "src/test/resources/images/image_test.png", setCategoryDTO);
     }
 
     @Test
@@ -73,6 +75,47 @@ class ProductServiceJPATest {
         verify(productRepository).findById(idArgumentCaptor.capture());
         Integer capturedId = idArgumentCaptor.getValue();
         assertThat(capturedId).isEqualTo(id);
+    }
+
+    @Test
+    void shouldThrow_ProductNotFoundException_When_GettingProductById() {
+        // arrange
+        Integer id = testProductEntity.getId();
+
+        // act
+        // assert
+        assertThatThrownBy(() -> underTest.getById(id)).hasMessageContaining("Product with id = " + id + " is not found");
+    }
+
+    @Test
+    void shouldThrow_ProductNotFoundException_When_GettingProductByName() {
+        // arrange
+        String name = testProductEntity.getName();
+
+        // act
+        // assert
+        assertThatThrownBy(() -> underTest.getByName(name)).hasMessageContaining("Product with name = " + name + " is not found");
+    }
+
+    @Test
+    void shouldThrow_ProductNotFoundException_When_GettingProductByCategoryId() {
+        // arrange
+        Integer categoryId = testProductEntity.getCategoryEntity().getId();
+        given(categoryRepository.findById(categoryId)).willReturn(Optional.of(testCategoryEntity));
+
+        // act
+        // assert
+        assertThatThrownBy(() -> underTest.getByCategoryId(categoryId)).hasMessageContaining("Product with category.id = " + categoryId + " is not found");
+    }
+
+    @Test
+    void shouldThrow_CategoryNotFoundException_When_GettingProductByCategoryId() {
+        // arrange
+        Integer categoryId = testProductEntity.getCategoryEntity().getId();
+
+        // act
+        // assert
+        assertThatThrownBy(() -> underTest.getByCategoryId(categoryId)).hasMessageContaining("Category with id = " + categoryId + " is not found");
     }
 
     @Test
@@ -177,5 +220,16 @@ class ProductServiceJPATest {
         verify(productRepository).findByName(nameArgumentCaptor.capture());
         String capturedName = nameArgumentCaptor.getValue();
         assertThat(name).isEqualTo(capturedName);
+    }
+
+    @Test
+    void shouldGetImageByProductId(){
+        // arrange
+        Integer id = testProductEntity.getId();
+        given(productRepository.findById(id)).willReturn(Optional.of(testProductEntity));
+
+        // act
+        // assert
+        assertThatCode(() -> underTest.getImageByProductId(id)).doesNotThrowAnyException();
     }
 }

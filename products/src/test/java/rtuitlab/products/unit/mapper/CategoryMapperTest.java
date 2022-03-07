@@ -1,4 +1,4 @@
-package rtuitlab.products.mapper;
+package rtuitlab.products.unit.mapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -6,6 +6,7 @@ import rtuitlab.products.dto.category.GetCategoryDTO;
 import rtuitlab.products.dto.category.PostPutCategoryDTO;
 import rtuitlab.products.dto.category.SetCategoryDTO;
 import rtuitlab.products.entities.CategoryEntity;
+import rtuitlab.products.mapper.CategoryMapperImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 

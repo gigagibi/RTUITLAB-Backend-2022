@@ -1,4 +1,4 @@
-package rtuitlab.products.services.jpaImpl;
+package rtuitlab.products.unit.services.jpaImpl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,10 +11,12 @@ import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.exception.category.CategoryNotFoundException;
 import rtuitlab.products.mapper.CategoryMapper;
 import rtuitlab.products.repositories.CategoryRepository;
+import rtuitlab.products.services.jpaImpl.CategoryServiceJPA;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -125,5 +127,15 @@ class CategoryServiceJPATest {
 
         // assert
         verify(categoryRepository).deleteAll();
+    }
+
+    @Test
+    void shouldThrow_CategoryNotFoundException_When_GettingCategoryById() {
+        // arrange
+        Integer categoryId = testCategoryEntity.getId();
+
+        // act
+        // assert
+        assertThatThrownBy(() -> underTest.getById(categoryId)).hasMessageContaining("Category with id = " + categoryId + " is not found");
     }
 }

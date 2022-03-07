@@ -16,6 +16,11 @@ import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.repositories.ProductRepository;
 import rtuitlab.products.services.ProductService;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -69,12 +74,6 @@ public class ProductServiceJPA implements ProductService {
         return productRepository.findAll().stream().map(c -> productMapper.entityToDTO(c)).collect(Collectors.toList());
     }
 
-    @Override
-    public String getImagePath(int id) throws ProductNotFoundException {
-        if(productRepository.findById(id).isEmpty())
-            throw new ProductNotFoundException(id);
-        return productRepository.getById(id).getImagePath();
-    }
 
     @Override
     public List<GetProductDTO> getByCategoryId(int id) throws CategoryNotFoundException, ProductWithGivenCategoryNotFoundException {
@@ -91,5 +90,15 @@ public class ProductServiceJPA implements ProductService {
         if(productEntity==null)
             throw new ProductWithGivenNameNotFoundException(name);
         return productMapper.entityToDTO(productEntity);
+    }
+
+    @Override
+    public byte[] getImageByProductId(int id) throws ProductNotFoundException, IOException {
+        ProductEntity productEntity = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        String imagePath = productEntity.getImagePath();
+        BufferedImage bImage = ImageIO.read(new File(imagePath));
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ImageIO.write(bImage, "png", bos );
+        return bos.toByteArray();
     }
 }

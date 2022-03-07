@@ -8,6 +8,7 @@ import rtuitlab.products.exception.product.ProductNotFoundException;
 import rtuitlab.products.exception.product.ProductWithGivenCategoryNotFoundException;
 import rtuitlab.products.exception.product.ProductWithGivenNameNotFoundException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ProductService {
@@ -17,7 +18,7 @@ public interface ProductService {
     PostedPutProductDTO update(int id, PostPutProductDTO putProductDTO) throws ProductNotFoundException;
     List<GetProductDTO> deleteById(int id) throws ProductNotFoundException;
     List<GetProductDTO> deleteAll();
-    String getImagePath(int id) throws ProductNotFoundException;
     List<GetProductDTO> getByCategoryId(int id) throws CategoryNotFoundException, ProductWithGivenCategoryNotFoundException;
     GetProductDTO getByName(String name) throws ProductWithGivenNameNotFoundException;
+    byte[] getImageByProductId(int id) throws ProductNotFoundException, IOException;
 }
