@@ -4,16 +4,12 @@ spring:
   data:
     mongodb:
       auto-index-creation: true
-      host: localhost
-      port: 27017
-      database: rtu_orders
-      username: root
-      password: root
       authentication-database: admin
+      uri: ${SPRING_MONGO_URI}
 eureka:
   client:
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${SPRING_EUREKA_HOST}
 server:
   port: 3501

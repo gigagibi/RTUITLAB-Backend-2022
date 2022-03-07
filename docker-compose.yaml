@@ -1,8 +1,16 @@
 version: "3.8"
 services:
+  eureka:
+    image: gigagibi/rtuitlab-2022-eureka
+    container_name: eureka
+    restart: always
+    ports:
+      - "8761:8761"
+
   orders_mongodb:
     image: mongo
     container_name: orders_mongo
+    restart: always
     ports:
       - "27017:27017"
     volumes:
@@ -10,18 +18,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
-
-  supplies_mongodb:
-    image: mongo
-    container_name: supplies_mongo
-    ports:
-      - "27018:27017"
-    volumes:
-      - supplies_data:/data/db
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-
   orders_mongo_express:
     image: mongo-express
     container_name: orders_mongo_express
@@ -35,6 +31,30 @@ services:
       - ME_CONFIG_MONGODB_ADMINPASSWORD=root
       - ME_CONFIG_MONGODB_SERVER=orders_mongodb
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
+  orders:
+    image: gigagibi/rtuitlab-2022-orders
+    container_name: orders
+    restart: always
+    ports:
+      - "3501:3501"
+    depends_on:
+      - orders_mongodb
+      - eureka
+    environment:
+      - SPRING_MONGO_URI=mongodb://root:root@orders_mongodb:27017/rtu_orders?authSource=admin
+      - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+
+  supplies_mongodb:
+    image: mongo
+    container_name: supplies_mongo
+    restart: always
+    ports:
+      - "27018:27017"
+    volumes:
+      - supplies_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
   supplies_mongo_express:
     image: mongo-express
     container_name: supplies_mongo_express
@@ -49,9 +69,23 @@ services:
       - ME_CONFIG_MONGODB_SERVER=supplies_mongodb
       - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
       - ME_CONFIG_MONGODB_PORT=27017
+  supplies:
+    image: gigagibi/rtuitlab-2022-supplies
+    container_name: supplies
+    restart: always
+    ports:
+      - "3503:3503"
+    depends_on:
+      - supplies_mongodb
+      - eureka
+    environment:
+      - SPRING_MONGO_URI=mongodb://root:root@supplies_mongodb:27017/rtu_supplies?authSource=admin
+      - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+
   products_postgresdb:
     image: postgres
     container_name: products_postgres
+    restart: always
     ports:
       - "5432:5432"
     volumes:
@@ -60,6 +94,33 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=root
       - POSTGRES_DB=rtu_products
+  products:
+    image: gigagibi/rtuitlab-2022-products
+    container_name: products
+    restart: always
+    ports:
+      - "3502:3502"
+    depends_on:
+      - products_postgresdb
+      - eureka
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://products_postgresdb:5432/rtu_products
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+  gateway:
+    image: gigagibi/rtuitlab-2022-gateway
+    container_name: gateway
+    restart: always
+    environment:
+      - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+    ports:
+      - "3500:3500"
+    depends_on:
+      - eureka
+      - orders
+      - supplies
+      - products
 volumes:
   orders_data:
   supplies_data:
