@@ -1,5 +1,6 @@
 package rtuitlab.products.controllers;
 
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,17 +22,19 @@ import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api/v1/products")
 @AllArgsConstructor
 public class ProductController {
     private ProductService productService;
 
     @GetMapping("/")
+    @ApiOperation(value = "get all products", produces = "application/json")
     private List<GetProductDTO> getProducts() {
         return productService.getAll();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "get product with given id", produces = "application/json")
     private GetProductDTO getProduct(@PathVariable Integer id) {
         try {
             return productService.getById(id);
@@ -41,18 +44,23 @@ public class ProductController {
     }
 
     @GetMapping("/{id}/image")
+    @ApiOperation(value = "get image of the products as byte array", produces = "application/octet-stream")
     private byte[] getProductImage(@PathVariable int id) {
         try {
             BufferedImage bImage = ImageIO.read(new File(productService.getImagePath(id)));
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             ImageIO.write(bImage, "png", bos );
             return bos.toByteArray();
-        } catch (ProductNotFoundException | IOException e) {
+        } catch (ProductNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping("/withCategory/{id}")
+    @ApiOperation(value = "get all products with category that has given id", produces = "application/json")
     private List<GetProductDTO> getProductsByCategoryId(@PathVariable int id) {
         try {
             return productService.getByCategoryId(id);
@@ -62,6 +70,7 @@ public class ProductController {
     }
 
     @GetMapping("/withName/{name}")
+    @ApiOperation(value = "get all products with given name", produces = "application/json")
     private GetProductDTO getProductsByName(@PathVariable String name) {
         try {
             return productService.getByName(name);
@@ -71,11 +80,13 @@ public class ProductController {
     }
 
     @PostMapping("/")
+    @ApiOperation(value = "add product", produces = "application/json")
     private List<PostedPutProductDTO> addProduct(@RequestBody PostPutProductDTO postProductDTO) {
         return productService.create(postProductDTO);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "update product with given id", produces = "application/json")
     private PostedPutProductDTO updateProduct(@PathVariable int id, @RequestBody PostPutProductDTO putProductDTO) {
         try {
             return productService.update(id, putProductDTO);
@@ -85,6 +96,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "delete product with given id", produces = "application/json")
     private List<GetProductDTO> deleteProduct(@PathVariable int id) {
         try {
             return productService.deleteById(id);
@@ -94,6 +106,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/")
+    @ApiOperation(value = "delete all categories", produces = "application/json")
     private List<GetProductDTO> deleteProducts() {
         return productService.deleteAll();
     }

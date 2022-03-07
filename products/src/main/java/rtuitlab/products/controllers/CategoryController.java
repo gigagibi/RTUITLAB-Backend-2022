@@ -1,6 +1,8 @@
 package rtuitlab.products.controllers;
 
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +15,20 @@ import rtuitlab.products.services.CategoryService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping("/api/v1/categories")
 @AllArgsConstructor
+@Api("Controller for categories")
 public class CategoryController {
     private CategoryService categoryService;
 
-    @GetMapping("/")
+    @GetMapping(value = "/")
+    @ApiOperation(value = "get all categories", produces = "application/json")
     private List<GetCategoryDTO> getCategories() {
         return categoryService.getAll();
     }
 
     @GetMapping("/{id}")
+    @ApiOperation(value = "get category with given id", produces = "application/json")
     private GetCategoryDTO getCategory(@PathVariable Integer id) {
         try {
             return categoryService.getById(id);
@@ -33,11 +38,13 @@ public class CategoryController {
     }
 
     @PostMapping("/")
+    @ApiOperation(value = "add category", produces = "application/json")
     private List<GetCategoryDTO> addCategory(@RequestBody PostPutCategoryDTO postCategoryDTO) {
         return categoryService.create(postCategoryDTO);
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "update category with given id", produces = "application/json")
     private GetCategoryDTO updateCategory(@PathVariable int id, @RequestBody PostPutCategoryDTO putCategoryDTO) {
         try {
             return categoryService.update(id, putCategoryDTO);
@@ -47,6 +54,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "delete category with given id", produces = "application/json")
     private List<GetCategoryDTO> deleteCategory(@PathVariable int id) {
         try {
             return categoryService.deleteById(id);
@@ -56,6 +64,7 @@ public class CategoryController {
     }
 
     @DeleteMapping("/")
+    @ApiOperation(value = "delete all categories", produces = "application/json")
     private List<GetCategoryDTO> deleteCategories() {
         return categoryService.deleteAll();
     }
