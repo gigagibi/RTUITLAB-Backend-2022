@@ -15,11 +15,19 @@ import java.util.List;
 @Document
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class SupplyDocument extends AbstractDocument {
     private String supplier_id;
     private Date supplyDate;
     List<SupplyProductInfo> supplyProductInfos;
     private Integer summaryCost;
+
+    public SupplyDocument(String id, String supplier_id, Date supplyDate, List<SupplyProductInfo> supplyProductInfos, Integer summaryCost) {
+        super(id);
+        this.supplier_id = supplier_id;
+        this.supplyDate = supplyDate;
+        this.supplyProductInfos = supplyProductInfos;
+        this.summaryCost = summaryCost;
+    }
+
+
 }

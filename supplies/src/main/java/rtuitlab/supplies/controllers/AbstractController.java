@@ -8,7 +8,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public abstract class AbstractController<E extends AbstractDocument, S extends CommonService<E>> implements CommonController<E> {
-    private final S service;
+    protected final S service;
 
     @Override
     public List<E> getAll() {
