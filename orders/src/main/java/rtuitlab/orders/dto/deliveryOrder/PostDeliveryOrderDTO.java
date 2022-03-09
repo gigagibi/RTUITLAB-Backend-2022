@@ -3,8 +3,8 @@ package rtuitlab.orders.dto.deliveryOrder;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import rtuitlab.orders.models.BoughtProductInfo;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 @Data
@@ -13,7 +13,7 @@ import java.util.List;
 public class PostDeliveryOrderDTO {
     private Integer number;
     private Integer cost;
-    private List<Integer> productsIds;
+    private List<BoughtProductInfo> products;
     private String address;
     private String phone;
 }

@@ -2,15 +2,17 @@ package rtuitlab.orders.mappers;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
-import rtuitlab.orders.dto.order.*;
-import rtuitlab.orders.models.Order;
+import rtuitlab.orders.models.documents.OrderDocument;
+import rtuitlab.orders.dto.order.GetOrderDTO;
+import rtuitlab.orders.dto.order.PostOrderDTO;
+import rtuitlab.orders.dto.order.PutOrderDTO;
 
 @Component
 @Mapper(componentModel = "spring")
 public interface OrderMapper {
-    Order postDTOToEntity(PostOrderDTO postOrderDTO);
+    OrderDocument postDTOToEntity(PostOrderDTO postOrderDTO);
 
-    GetOrderDTO entityToDTO(Order order);
+    GetOrderDTO entityToDTO(OrderDocument orderDocument);
 
-    Order putDTOToEntity(PutOrderDTO putOrderDTO);
+    OrderDocument putDTOToEntity(PutOrderDTO putOrderDTO);
 }

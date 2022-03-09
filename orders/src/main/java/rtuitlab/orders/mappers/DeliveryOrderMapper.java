@@ -2,15 +2,17 @@ package rtuitlab.orders.mappers;
 
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
-import rtuitlab.orders.dto.deliveryOrder.*;
-import rtuitlab.orders.models.DeliveryOrder;
+import rtuitlab.orders.models.documents.DeliveryOrderDocument;
+import rtuitlab.orders.dto.deliveryOrder.GetDeliveryOrderDTO;
+import rtuitlab.orders.dto.deliveryOrder.PostDeliveryOrderDTO;
+import rtuitlab.orders.dto.deliveryOrder.PutDeliveryOrderDTO;
 
 @Component
 @Mapper(componentModel = "spring")
 public interface DeliveryOrderMapper {
-    DeliveryOrder postDTOToEntity(PostDeliveryOrderDTO postDeliveryOrderDTO);
+    DeliveryOrderDocument postDTOToEntity(PostDeliveryOrderDTO postDeliveryOrderDTO);
 
-    GetDeliveryOrderDTO entityToDTO(DeliveryOrder deliveryOrder);
+    GetDeliveryOrderDTO entityToDTO(DeliveryOrderDocument deliveryOrderDocument);
 
-    DeliveryOrder putDTOToEntity(PutDeliveryOrderDTO putDeliveryOrderDTO);
+    DeliveryOrderDocument putDTOToEntity(PutDeliveryOrderDTO putDeliveryOrderDTO);
 }

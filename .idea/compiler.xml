@@ -2,18 +2,40 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for RTUITLAB-Backend-2022" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.22/lombok-1.18.22.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct-processor/1.4.2.Final/mapstruct-processor-1.4.2.Final.jar" />
+          <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.2.Final/mapstruct-1.4.2.Final.jar" />
+        </processorPath>
         <module name="orders" />
         <module name="supplies" />
-        <module name="eureka" />
         <module name="gateway" />
+        <module name="eureka" />
+        <module name="products" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="purchases" target="16" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="RTUITLAB-Backend-2022" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="eureka" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="gateway" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="orders" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="products" options="-Amapstruct.defaultComponentModel=spring" />
+      <module name="supplies" options="-Amapstruct.defaultComponentModel=spring" />
+    </option>
   </component>
 </project>

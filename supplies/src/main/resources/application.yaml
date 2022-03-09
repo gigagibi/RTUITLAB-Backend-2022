@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: supplies
+  data:
+    mongodb:
+      auto-index-creation: true
+      uri: ${SPRING_MONGO_URI}
+      authentication-database: admin
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+eureka:
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${SPRING_EUREKA_HOST}
+server:
+  port: 3503

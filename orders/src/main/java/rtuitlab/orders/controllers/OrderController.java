@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/order")
+@RequestMapping("/api/v1/order")
 public class OrderController {
     private OrderService orderService;
 
@@ -24,7 +24,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public GetOrderDTO getOrder(@PathVariable int id) {
+    public GetOrderDTO getOrder(@PathVariable String id) {
         try {
             return orderService.getById(id);
         }
@@ -39,7 +39,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public GetOrderDTO updateOrder(@PathVariable int id, @RequestBody PutOrderDTO putOrderDTO) {
+    public GetOrderDTO updateOrder(@PathVariable String id, @RequestBody PutOrderDTO putOrderDTO) {
         try {
             return orderService.update(id, putOrderDTO);
         }
@@ -49,7 +49,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public List<GetOrderDTO> deleteOrder(@PathVariable int id) {
+    public List<GetOrderDTO> deleteOrder(@PathVariable String id) {
         try {
             return orderService.deleteById(id);
         }
