@@ -18,5 +18,4 @@ public class SupplyPostPutDTO extends AbstractPostPutDTO {
     private String supplier_id;
     private Date supplyDate;
     List<SupplyProductInfo> supplyProductInfos;
-    private Integer summaryCost;
 }

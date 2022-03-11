@@ -29,8 +29,7 @@ public class SupplyMapperTest extends AbstractMapperTest<SupplyDocument, SupplyG
         this.pSupplier = () -> new SupplyPostPutDTO(
                 "1",
                 new Date(1),
-                List.of(new SupplyProductInfo("product", "desc", 1, 100)),
-                100
+                List.of(new SupplyProductInfo("product", "desc", 1, 100))
         );
     }
 }
