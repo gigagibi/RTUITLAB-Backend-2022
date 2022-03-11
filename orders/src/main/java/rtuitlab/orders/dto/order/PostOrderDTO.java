@@ -12,6 +12,5 @@ import java.util.List;
 @NoArgsConstructor
 public class PostOrderDTO {
     private Integer number;
-    private Integer cost;
     private List<BoughtProductInfo> products;
 }

@@ -26,11 +26,11 @@ class OrderMapperTest {
     void setUp() {
         underTest = new OrderMapperImpl();
         List<BoughtProductInfo> boughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 2));
         List<BoughtProductInfo> updatedBoughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 2),
-                new BoughtProductInfo(2, 2));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 2));
         Date date = new Date();
         testOrderDocument = new OrderDocument(
                 "1",
@@ -39,9 +39,9 @@ class OrderMapperTest {
                 boughtProductInfos,
                 date
         );
-        testPostOrderDTO = new PostOrderDTO(1, 100,
+        testPostOrderDTO = new PostOrderDTO(1,
                 boughtProductInfos);
-        testPutOrderDTO = new PutOrderDTO(2, 150,
+        testPutOrderDTO = new PutOrderDTO(2,
                 updatedBoughtProductInfos, date);
     }
 

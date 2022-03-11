@@ -11,5 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BoughtProductInfo {
     private Integer id;
+    private Integer cost;
     private Integer amount;
 }

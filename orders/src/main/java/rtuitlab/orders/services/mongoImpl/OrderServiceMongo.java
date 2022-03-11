@@ -7,6 +7,7 @@ import rtuitlab.orders.dto.order.PostOrderDTO;
 import rtuitlab.orders.dto.order.PutOrderDTO;
 import rtuitlab.orders.exceptions.OrderNotFoundException;
 import rtuitlab.orders.mappers.OrderMapper;
+import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.OrderDocument;
 import rtuitlab.orders.repositories.OrderRepository;
 import rtuitlab.orders.services.OrderService;
@@ -34,6 +35,11 @@ public class OrderServiceMongo implements OrderService {
     @Override
     public List<GetOrderDTO> create(PostOrderDTO order) {
         OrderDocument orderDocument = orderMapper.postDTOToEntity(order);
+        int cost = 0;
+        for (BoughtProductInfo boughtProductInfo: orderDocument.getProducts()) {
+            cost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+        }
+        orderDocument.setCost(cost);
         orderDocument.setOrderDate(new Date());
         orderRepository.save(orderDocument);
         return orderRepository.findAll().stream().map(o -> orderMapper.entityToDTO(o)).collect(Collectors.toList());
@@ -51,6 +57,11 @@ public class OrderServiceMongo implements OrderService {
     public GetOrderDTO update(String id, PutOrderDTO order) throws OrderNotFoundException {
         OrderDocument newOrderDocument = orderMapper.putDTOToEntity(order);
         newOrderDocument.setId(id);
+        int cost = 0;
+        for (BoughtProductInfo boughtProductInfo: newOrderDocument.getProducts()) {
+            cost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+        }
+        newOrderDocument.setCost(cost);
         orderRepository.save(newOrderDocument);
         OrderDocument updatedOrderDocument = orderRepository.findById(id).orElseThrow(() -> new OrderNotFoundException(id));
         return orderMapper.entityToDTO(updatedOrderDocument);

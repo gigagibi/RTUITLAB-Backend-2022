@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PutOrderDTO {
     private Integer number;
-    private Integer cost;
     private List<BoughtProductInfo> products;
     private Date orderDate;
 }

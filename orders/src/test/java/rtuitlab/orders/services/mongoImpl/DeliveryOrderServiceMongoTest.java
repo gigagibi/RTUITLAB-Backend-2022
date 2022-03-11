@@ -37,11 +37,11 @@ class DeliveryOrderServiceMongoTest {
     void setUp() {
         underTest = new DeliveryOrderServiceMongo(deliveryOrderRepository, deliveryOrderMapper);
         List<BoughtProductInfo> boughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 1));
         List<BoughtProductInfo> updatedBoughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 1));
 
         Date date = new Date();
         testDeliveryOrderDocument = new DeliveryOrderDocument(
@@ -54,9 +54,9 @@ class DeliveryOrderServiceMongoTest {
                 "phone"
         );
 
-        testPostDeliveryOrderDTO = new PostDeliveryOrderDTO(1, 100,
+        testPostDeliveryOrderDTO = new PostDeliveryOrderDTO(1,
                 boughtProductInfos, "address", "phone");
-        testPutDeliveryOrderDTO = new PutDeliveryOrderDTO(2, 150,
+        testPutDeliveryOrderDTO = new PutDeliveryOrderDTO(2,
                 updatedBoughtProductInfos, date, "address_changed", "phone_changed");
         testUpdatedDeliveryOrderDocument = new DeliveryOrderDocument(null, 2, 150,
                 updatedBoughtProductInfos, date, "address_changed", "phone_changed");

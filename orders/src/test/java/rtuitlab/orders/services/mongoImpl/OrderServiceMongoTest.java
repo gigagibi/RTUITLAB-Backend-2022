@@ -40,11 +40,11 @@ class OrderServiceMongoTest {
     void setUp() {
         underTest = new OrderServiceMongo(orderRepository, orderMapper);
         List<BoughtProductInfo> boughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 1));
         List<BoughtProductInfo> updatedBoughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 1));
 
         Date date = new Date();
         testOrderDocument = new OrderDocument(
@@ -55,9 +55,9 @@ class OrderServiceMongoTest {
                 date
         );
 
-        testPostOrderDTO = new PostOrderDTO(1, 100,
+        testPostOrderDTO = new PostOrderDTO(1,
                 boughtProductInfos);
-        testPutOrderDTO = new PutOrderDTO(2, 150,
+        testPutOrderDTO = new PutOrderDTO(2,
                 updatedBoughtProductInfos, date);
         testUpdatedOrderDocument = new OrderDocument(null, 2, 150,
                 updatedBoughtProductInfos, date);

@@ -31,4 +31,17 @@ public class SupplyService extends AbstractService<SupplyDocument, SupplyReposit
         repository.save(supplyDocument);
         return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
     }
+
+    @Override
+    public SupplyGetDTO update(String id, SupplyPostPutDTO supplyPostPutDTO) {
+        SupplyDocument supplyDocument = mapper.postPutDTOToEntity(supplyPostPutDTO);
+        supplyDocument.setId(id);
+        int summaryCost=0;
+        for (SupplyProductInfo supplyProductInfo : supplyDocument.getSupplyProductInfos()){
+            summaryCost += supplyProductInfo.getCost() * supplyProductInfo.getAmount();
+        }
+        supplyDocument.setSummaryCost(summaryCost);
+        repository.save(supplyDocument);
+        return mapper.entityToDTO(supplyDocument);
+    }
 }

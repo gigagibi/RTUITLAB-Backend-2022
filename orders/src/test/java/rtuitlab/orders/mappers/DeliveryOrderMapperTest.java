@@ -27,11 +27,11 @@ class DeliveryOrderMapperTest {
     void setUp() {
         underTest = new DeliveryOrderMapperImpl();
         List<BoughtProductInfo> boughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 1),
-                new BoughtProductInfo(2, 1));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 2));
         List<BoughtProductInfo> updatedBoughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 2),
-                new BoughtProductInfo(2, 2));
+                new BoughtProductInfo(1, 100, 1),
+                new BoughtProductInfo(2, 200, 2));
         Date date = new Date();
         testDeliveryOrderDocument = new DeliveryOrderDocument(
                 "1",
@@ -42,9 +42,9 @@ class DeliveryOrderMapperTest {
                 "address",
                 "phone"
         );
-        testPostDeliveryOrderDTO = new PostDeliveryOrderDTO(1, 100,
+        testPostDeliveryOrderDTO = new PostDeliveryOrderDTO(1,
                 boughtProductInfos, "address", "phone");
-        testPutDeliveryOrderDTO = new PutDeliveryOrderDTO(2, 150,
+        testPutDeliveryOrderDTO = new PutDeliveryOrderDTO(2,
                 updatedBoughtProductInfos, date, "address_changed", "phone_changed");
     }
 

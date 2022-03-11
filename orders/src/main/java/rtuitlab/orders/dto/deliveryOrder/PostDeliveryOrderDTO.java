@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PostDeliveryOrderDTO {
     private Integer number;
-    private Integer cost;
     private List<BoughtProductInfo> products;
     private String address;
     private String phone;
