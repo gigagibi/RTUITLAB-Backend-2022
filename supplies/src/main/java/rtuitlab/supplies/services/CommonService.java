@@ -1,19 +1,21 @@
 package rtuitlab.supplies.services;
 
+import rtuitlab.supplies.dto.AbstractGetDTO;
+import rtuitlab.supplies.dto.AbstractPostPutDTO;
 import rtuitlab.supplies.models.AbstractDocument;
 
 import java.util.List;
 
-public interface CommonService<E extends AbstractDocument> {
-    List<E> getAll();
+public interface CommonService<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO> {
+    List<G> getAll();
 
-    E getById(String id);
+    G getById(String id);
 
-    List<E> create(E e);
+    List<G> create(P p);
 
-    E update(String id, E e);
+    G update(String id, P p);
 
-    List<E> deleteById(String id);
+    List<G> deleteById(String id);
 
-    List<E> deleteAll();
+    List<G> deleteAll();
 }

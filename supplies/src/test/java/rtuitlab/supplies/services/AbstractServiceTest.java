@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import rtuitlab.supplies.dto.AbstractGetDTO;
+import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.mappers.CommonMapper;
 import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.repositories.CommonRepository;
 
@@ -16,11 +19,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public abstract class AbstractServiceTest<E extends AbstractDocument, S extends CommonService<E>, R extends CommonRepository<E>> {
+public abstract class AbstractServiceTest<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO, S extends CommonService<E, G, P>, M extends CommonMapper<E, G, P>, R extends CommonRepository<E>> {
     protected R mockRepository;
+    protected M mockMapper;
     protected S service;
     protected Supplier<E> eSupplier;
     protected Supplier<ArgumentCaptor<E>> eArgumentCaptorSupplier;
+    protected Supplier<P> pSupplier;
+    protected Supplier<G> gSupplier;
 
     @Test
     void shouldGetAll() {
@@ -37,7 +43,9 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, S extends 
     void shouldGetById() {
         // arrange
         E e = eSupplier.get();
+        G g = gSupplier.get();
         String id = e.getId();
+        given(mockMapper.entityToDTO(e)).willReturn(g);
         given(mockRepository.findById(id)).willReturn(Optional.of(e));
 
         // act
@@ -54,8 +62,11 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, S extends 
     void shouldCreate() {
         // arrange (no given arrange)
         E e = eSupplier.get();
+        P p = pSupplier.get();
+        given(mockMapper.postPutDTOToEntity(p)).willReturn(e);
+
         // act
-        service.create(e);
+        service.create(p);
 
         // assert
         ArgumentCaptor<E> eArgumentCaptor = eArgumentCaptorSupplier.get();
@@ -70,9 +81,11 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, S extends 
         E e = eSupplier.get();
         String id = e.getId();
         given(mockRepository.findById(id)).willReturn(Optional.of(e));
+        P p = pSupplier.get();
+        given(mockMapper.postPutDTOToEntity(p)).willReturn(e);
 
         // act
-        service.update(id, e);
+        service.update(id, p);
 
         // assert
         ArgumentCaptor<E> eArgumentCaptor = eArgumentCaptorSupplier.get();

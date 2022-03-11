@@ -1,49 +1,53 @@
 package rtuitlab.supplies.services;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Service;
+import rtuitlab.supplies.dto.AbstractGetDTO;
+import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.mappers.CommonMapper;
 import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.repositories.CommonRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class AbstractService<E extends AbstractDocument, R extends CommonRepository<E>> implements CommonService<E> {
+public class AbstractService<E extends AbstractDocument, R extends CommonRepository<E>, G extends AbstractGetDTO, P extends AbstractPostPutDTO, M extends CommonMapper<E, G, P>> implements CommonService<E, G, P> {
 
     protected final R repository;
+    protected final M mapper;
     @Override
-    public List<E> getAll() {
-        return repository.findAll();
+    public List<G> getAll() {
+        return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public E getById(String id) {
-        return repository.findById(id).orElse(null);
+    public G getById(String id) {
+        return mapper.entityToDTO(repository.findById(id).orElse(null));
     }
 
     @Override
-    public List<E> create(E e) {
-        repository.save(e);
-        return repository.findAll();
+    public List<G> create(P p) {
+        repository.save(mapper.postPutDTOToEntity(p));
+        return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public E update(String id, E e) {
+    public G update(String id, P p) {
+        E e = mapper.postPutDTOToEntity(p);
         e.setId(id);
         repository.save(e);
-        return repository.findById(id).orElse(null);
+        return mapper.entityToDTO(repository.findById(id).orElse(null));
     }
 
     @Override
-    public List<E> deleteById(String id) {
+    public List<G> deleteById(String id) {
         repository.deleteById(id);
-        return repository.findAll();
+        return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
     }
 
     @Override
-    public List<E> deleteAll() {
+    public List<G> deleteAll() {
         repository.deleteAll();
-        return repository.findAll();
+        return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
     }
 }

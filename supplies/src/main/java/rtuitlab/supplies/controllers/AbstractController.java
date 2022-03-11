@@ -1,42 +1,44 @@
 package rtuitlab.supplies.controllers;
 
 import lombok.AllArgsConstructor;
+import rtuitlab.supplies.dto.AbstractGetDTO;
+import rtuitlab.supplies.dto.AbstractPostPutDTO;
 import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.services.CommonService;
 
 import java.util.List;
 
 @AllArgsConstructor
-public abstract class AbstractController<E extends AbstractDocument, S extends CommonService<E>> implements CommonController<E> {
+public abstract class AbstractController<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO, S extends CommonService<E, G, P>> implements CommonController<E, G, P> {
     protected final S service;
 
     @Override
-    public List<E> getAll() {
+    public List<G> getAll() {
         return service.getAll();
     }
 
     @Override
-    public E getById(String id) {
+    public G getById(String id) {
         return service.getById(id);
     }
 
     @Override
-    public List<E> create(E e) {
-        return service.create(e);
+    public List<G> create(P p) {
+        return service.create(p);
     }
 
     @Override
-    public E update(String id, E e) {
-        return service.update(id, e);
+    public G update(String id, P p) {
+        return service.update(id, p);
     }
 
     @Override
-    public List<E> deleteById(String id) {
+    public List<G> deleteById(String id) {
         return service.deleteById(id);
     }
 
     @Override
-    public List<E> deleteAll() {
-        return service.deleteAll();
+    public List<G> deleteAll() {
+        return null;
     }
 }
