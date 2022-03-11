@@ -18,7 +18,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
 public abstract class AbstractServiceTest<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO, S extends CommonService<E, G, P>, M extends CommonMapper<E, G, P>, R extends CommonRepository<E>> {
     protected R mockRepository;
     protected M mockMapper;
