@@ -2,19 +2,12 @@ package rtuitlab.supplies.services;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import rtuitlab.supplies.dto.supplier.SupplierGetDTO;
-import rtuitlab.supplies.dto.supplier.SupplierPostPutDTO;
+import rtuitlab.supplies.dto.supplier.*;
 import rtuitlab.supplies.mappers.SupplierMapper;
-import rtuitlab.supplies.models.SupplyProductInfo;
 import rtuitlab.supplies.models.documents.SupplierDocument;
-import rtuitlab.supplies.models.documents.SupplyDocument;
 import rtuitlab.supplies.repositories.SupplierRepository;
-import rtuitlab.supplies.repositories.SupplyRepository;
 
-import java.util.Date;
-import java.util.List;
-
-public class SupplierServiceTest extends AbstractServiceTest<SupplierDocument, SupplierGetDTO, SupplierPostPutDTO, SupplierService, SupplierMapper, SupplierRepository> {
+public class SupplierServiceTest extends AbstractServiceTest<SupplierDocument, SupplierGetDTO, SupplierPostDTO, SupplierPutDTO, SupplierPostedDTO, SupplierUpdatedDTO, SupplierService, SupplierMapper, SupplierRepository> {
     public SupplierServiceTest() {
         SupplierRepository supplierMockRepository = Mockito.mock(SupplierRepository.class);
         SupplierMapper supplierMockMapper = Mockito.mock(SupplierMapper.class);
@@ -26,13 +19,30 @@ public class SupplierServiceTest extends AbstractServiceTest<SupplierDocument, S
                 "supplier",
                 "address",
                 "phone");
-        this.gSupplier = () -> new SupplierGetDTO(
+        this.getSupplier = () -> new SupplierGetDTO(
                 "1",
                 "supplier",
                 "address",
                 "phone"
         );
-        this.pSupplier = () -> new SupplierPostPutDTO(
+        this.postSupplier = () -> new SupplierPostDTO(
+                "supplier",
+                "address",
+                "phone"
+        );
+        this.putSupplier = () -> new SupplierPutDTO(
+                "supplier",
+                "address",
+                "phone"
+        );
+        this.postedSupplier = () -> new SupplierPostedDTO(
+                "1",
+                "supplier",
+                "address",
+                "phone"
+        );
+        this.updatedSupplier = () -> new SupplierUpdatedDTO(
+                "1",
                 "supplier",
                 "address",
                 "phone"

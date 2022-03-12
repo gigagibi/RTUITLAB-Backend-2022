@@ -1,29 +1,27 @@
 package rtuitlab.supplies.controllers;
 
-import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import rtuitlab.supplies.dto.AbstractGetDTO;
-import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.dto.*;
 import rtuitlab.supplies.models.AbstractDocument;
 
 import java.util.List;
 
-public interface CommonController<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO> {
+public interface CommonController<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO> {
     @GetMapping("/")
-    List<G> getAll();
+    List<Get> getAll();
 
     @GetMapping("/{id}")
-    G getById(@PathVariable String id);
+    Get getById(@PathVariable String id);
 
     @PostMapping("/")
-    List<G> create(@RequestBody P p);
+    List<Posted> create(@RequestBody Post p);
 
     @PutMapping("/{id}")
-    G update(@PathVariable String id, @RequestBody P p);
+    Updated update(@PathVariable String id, @RequestBody Put p);
 
     @DeleteMapping("/{id}")
-    List<G> deleteById(@PathVariable String id);
+    List<Get> deleteById(@PathVariable String id);
 
     @DeleteMapping("/")
-    List<G> deleteAll();
+    List<Get> deleteAll();
 }

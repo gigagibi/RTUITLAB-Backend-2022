@@ -1,16 +1,13 @@
 package rtuitlab.supplies.mappers;
 
-import rtuitlab.supplies.dto.supply.SupplyGetDTO;
-import rtuitlab.supplies.dto.supply.SupplyPostPutDTO;
+import rtuitlab.supplies.dto.supply.*;
 import rtuitlab.supplies.models.SupplyProductInfo;
 import rtuitlab.supplies.models.documents.SupplyDocument;
 
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-public class SupplyMapperTest extends AbstractMapperTest<SupplyDocument, SupplyGetDTO, SupplyPostPutDTO, SupplyMapper> {
+public class SupplyMapperTest extends AbstractMapperTest<SupplyDocument, SupplyGetDTO, SupplyPostDTO, SupplyPutDTO, SupplyPostedDTO, SupplyUpdatedDTO, SupplyMapper> {
     public SupplyMapperTest() {
         this.mapper = new SupplyMapperImpl();
         this.eSupplier = () -> new SupplyDocument(
@@ -19,17 +16,34 @@ public class SupplyMapperTest extends AbstractMapperTest<SupplyDocument, SupplyG
                 new Date(1),
                 List.of(new SupplyProductInfo("product", "desc", 1, 100)),
                 100);
-        this.gSupplier = () -> new SupplyGetDTO(
+        this.getSupplier = () -> new SupplyGetDTO(
                 "1",
                 "1",
                 new Date(1),
-                List.of(new SupplyProductInfo("product", "desc", 1, 100)),
-                100
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200)),
+                500
         );
-        this.pSupplier = () -> new SupplyPostPutDTO(
+        this.postSupplier = () -> new SupplyPostDTO(
                 "1",
                 new Date(1),
-                List.of(new SupplyProductInfo("product", "desc", 1, 100))
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.putSupplier = () -> new SupplyPutDTO(
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.postedSupplier = () -> new SupplyPostedDTO(
+                "1",
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.updatedSupplier = () -> new SupplyUpdatedDTO(
+                "1",
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
         );
     }
 }

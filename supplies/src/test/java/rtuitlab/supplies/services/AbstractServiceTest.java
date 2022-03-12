@@ -1,11 +1,9 @@
 package rtuitlab.supplies.services;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.junit.jupiter.MockitoExtension;
-import rtuitlab.supplies.dto.AbstractGetDTO;
-import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.dto.*;
+import rtuitlab.supplies.exceptions.EntityNotFoundException;
 import rtuitlab.supplies.mappers.CommonMapper;
 import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.repositories.CommonRepository;
@@ -14,18 +12,22 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public abstract class AbstractServiceTest<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO, S extends CommonService<E, G, P>, M extends CommonMapper<E, G, P>, R extends CommonRepository<E>> {
+public abstract class AbstractServiceTest<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO, S extends CommonService<E, Get, Post, Put, Posted, Updated>, M extends CommonMapper<E, Get, Post, Put, Posted, Updated>, R extends CommonRepository<E>> {
     protected R mockRepository;
     protected M mockMapper;
     protected S service;
     protected Supplier<E> eSupplier;
+    protected Supplier<Get> getSupplier;
+    protected Supplier<Post> postSupplier;
+    protected Supplier<Put> putSupplier;
+    protected Supplier<Posted> postedSupplier;
+    protected Supplier<Updated> updatedSupplier;
     protected Supplier<ArgumentCaptor<E>> eArgumentCaptorSupplier;
-    protected Supplier<P> pSupplier;
-    protected Supplier<G> gSupplier;
 
     @Test
     void shouldGetAll() {
@@ -39,12 +41,12 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, G extends 
     }
 
     @Test
-    void shouldGetById() {
+    void shouldGetById() throws EntityNotFoundException {
         // arrange
         E e = eSupplier.get();
-        G g = gSupplier.get();
+        Get g = getSupplier.get();
         String id = e.getId();
-        given(mockMapper.entityToDTO(e)).willReturn(g);
+        given(mockMapper.entityToGetDTO(e)).willReturn(g);
         given(mockRepository.findById(id)).willReturn(Optional.of(e));
 
         // act
@@ -61,11 +63,11 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, G extends 
     void shouldCreate() {
         // arrange (no given arrange)
         E e = eSupplier.get();
-        P p = pSupplier.get();
-        given(mockMapper.postPutDTOToEntity(p)).willReturn(e);
+        Post post = postSupplier.get();
+        given(mockMapper.postDTOToEntity(post)).willReturn(e);
 
         // act
-        service.create(p);
+        service.create(post);
 
         // assert
         ArgumentCaptor<E> eArgumentCaptor = eArgumentCaptorSupplier.get();
@@ -75,16 +77,16 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, G extends 
     }
 
     @Test
-    void shouldUpdate() {
+    void shouldUpdate() throws EntityNotFoundException {
         // arrange
         E e = eSupplier.get();
         String id = e.getId();
-        given(mockRepository.findById(id)).willReturn(Optional.of(e));
-        P p = pSupplier.get();
-        given(mockMapper.postPutDTOToEntity(p)).willReturn(e);
+        given(mockRepository.existsById(id)).willReturn(true);
+        Put put = putSupplier.get();
+        given(mockMapper.putDTOToEntity(put)).willReturn(e);
 
         // act
-        service.update(id, p);
+        service.update(id, put);
 
         // assert
         ArgumentCaptor<E> eArgumentCaptor = eArgumentCaptorSupplier.get();
@@ -94,10 +96,10 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, G extends 
     }
 
     @Test
-    void shouldDeleteById() {
+    void shouldDeleteById() throws EntityNotFoundException {
         // arrange
         String id = "1";
-        given(mockRepository.findById(id)).willReturn(any());
+        given(mockRepository.existsById(id)).willReturn(true);
 
         // act
         service.deleteById(id);
@@ -118,5 +120,34 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, G extends 
 
         // assert
         verify(mockRepository).deleteAll();
+    }
+
+    @Test
+    void shouldThrow_EntityNotFoundException_WhenGetsById() throws EntityNotFoundException {
+        // arrange
+        String id = "1";
+
+        // act
+        // assert
+        assertThatThrownBy(() -> service.getById(id)).hasMessage("Entity with id = " + id + " is not found");
+    }
+
+    @Test
+    void shouldThrow_EntityNotFoundException_WhenUpdatesById() throws EntityNotFoundException {
+        // arrange
+        String id = "1";
+
+        // act
+        // assert
+        assertThatThrownBy(() -> service.update(id, any())).hasMessage("Entity with id = " + id + " is not found");
+    }
+
+    @Test
+    void shouldThrow_EntityNotFoundException_WhenDeletesById() throws EntityNotFoundException {
+        // arrange
+        String id = "1";
+        // act
+        // assert
+        assertThatThrownBy(() -> service.deleteById(id)).hasMessage("Entity with id = " + id + " is not found");
     }
 }

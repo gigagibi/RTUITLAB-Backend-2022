@@ -1,14 +1,15 @@
-package rtuitlab.products.dto.category;
+package rtuitlab.supplies.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SetCategoryDTO {
-    private Integer id;
+public abstract class AbstractUpdatedDTO {
+    protected String id;
 }

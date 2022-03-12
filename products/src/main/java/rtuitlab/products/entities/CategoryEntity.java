@@ -1,6 +1,5 @@
 package rtuitlab.products.entities;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,14 +10,13 @@ import javax.persistence.*;
 @Table(name = "category")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class CategoryEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
+public class CategoryEntity extends AbstractEntity {
     @Column(name = "name")
     private String name;
+
+    public CategoryEntity(Integer id, String name) {
+        super(id);
+        this.name = name;
+    }
 }

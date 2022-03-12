@@ -1,32 +1,46 @@
 package rtuitlab.supplies.mappers;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import rtuitlab.supplies.dto.AbstractGetDTO;
-import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.dto.*;
 import rtuitlab.supplies.models.AbstractDocument;
 
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-public abstract class AbstractMapperTest<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO, M extends CommonMapper<E, G, P>> {
+public abstract class AbstractMapperTest<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO, M extends CommonMapper<E, Get, Post, Put, Posted, Updated>> {
     protected M mapper;
     protected Supplier<E> eSupplier;
-    protected Supplier<G> gSupplier;
-    protected Supplier<P> pSupplier;
+    protected Supplier<Get> getSupplier;
+    protected Supplier<Post> postSupplier;
+    protected Supplier<Put> putSupplier;
+    protected Supplier<Posted> postedSupplier;
+    protected Supplier<Updated> updatedSupplier;
 
     @Test
-    void shouldConvertPostPutDTOToGetDTO() {
+    void shouldConvertPostDTOToEntity() {
         // arrange
-        P p = pSupplier.get();
+        Post postDTO = postSupplier.get();
         E expectedE = eSupplier.get();
         expectedE.setId(null);
-        G g = gSupplier.get();
 
         // act
-        E e = mapper.postPutDTOToEntity(p);
+        E e = mapper.postDTOToEntity(postDTO);
+
+        // assert
+        assertThat(e.getId()).isEqualTo(expectedE.getId());
+        assertThat(e).isNotNull();
+    }
+
+    @Test
+    void shouldConvertPutDTOToEntity() {
+        // arrange
+        Put putDTO = putSupplier.get();
+        E expectedE = eSupplier.get();
+        expectedE.setId(null);
+
+        // act
+        E e = mapper.putDTOToEntity(putDTO);
 
         // assert
         assertThat(e.getId()).isEqualTo(expectedE.getId());
@@ -37,12 +51,38 @@ public abstract class AbstractMapperTest<E extends AbstractDocument, G extends A
     void shouldConvertEntityToGetDTO() {
         // arrange
         E e = eSupplier.get();
-        G expectedG = gSupplier.get();
+        Get expectedG = getSupplier.get();
 
         // act
-        G g = mapper.entityToDTO(e);
+        Get g = mapper.entityToGetDTO(e);
 
         // assert
         assertThat(g.getId()).isEqualTo(expectedG.getId());
+    }
+
+    @Test
+    void shouldConvertEntityToPostedDTO() {
+        // arrange
+        E e = eSupplier.get();
+        Posted expectedPosted = postedSupplier.get();
+
+        // act
+        Posted posted = mapper.entityToPostedDTO(e);
+
+        // assert
+        assertThat(posted.getId()).isEqualTo(expectedPosted.getId());
+    }
+
+    @Test
+    void shouldConvertEntityToUpdatedDTO() {
+        // arrange
+        E e = eSupplier.get();
+        Updated expectedUpdated = updatedSupplier.get();
+
+        // act
+        Updated updated = mapper.entityToUpdatedDTO(e);
+
+        // assert
+        assertThat(updated.getId()).isEqualTo(expectedUpdated.getId());
     }
 }

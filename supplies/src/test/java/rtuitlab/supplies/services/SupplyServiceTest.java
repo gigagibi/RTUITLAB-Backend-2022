@@ -2,11 +2,8 @@ package rtuitlab.supplies.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import rtuitlab.supplies.dto.supplier.SupplierGetDTO;
-import rtuitlab.supplies.dto.supply.SupplyGetDTO;
-import rtuitlab.supplies.dto.supply.SupplyPostPutDTO;
+import rtuitlab.supplies.dto.supply.*;
 import rtuitlab.supplies.mappers.SupplyMapper;
 import rtuitlab.supplies.models.SupplyProductInfo;
 import rtuitlab.supplies.models.documents.SupplyDocument;
@@ -14,14 +11,12 @@ import rtuitlab.supplies.repositories.SupplyRepository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
-public class SupplyServiceTest extends AbstractServiceTest<SupplyDocument, SupplyGetDTO, SupplyPostPutDTO, SupplyService, SupplyMapper, SupplyRepository> {
+public class SupplyServiceTest extends AbstractServiceTest<SupplyDocument, SupplyGetDTO, SupplyPostDTO, SupplyPutDTO, SupplyPostedDTO, SupplyUpdatedDTO, SupplyService, SupplyMapper, SupplyRepository> {
     public SupplyServiceTest() {
         SupplyRepository supplyMockRepository = Mockito.mock(SupplyRepository.class);
         SupplyMapper supplyMockMapper = Mockito.mock(SupplyMapper.class);
@@ -35,14 +30,31 @@ public class SupplyServiceTest extends AbstractServiceTest<SupplyDocument, Suppl
                 List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200)),
                 500
         );
-        this.gSupplier = () -> new SupplyGetDTO(
+        this.getSupplier = () -> new SupplyGetDTO(
                 "1",
                 "1",
                 new Date(1),
                 List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200)),
                 500
         );
-        this.pSupplier = () -> new SupplyPostPutDTO(
+        this.postSupplier = () -> new SupplyPostDTO(
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.putSupplier = () -> new SupplyPutDTO(
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.postedSupplier = () -> new SupplyPostedDTO(
+                "1",
+                "1",
+                new Date(1),
+                List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
+        );
+        this.updatedSupplier = () -> new SupplyUpdatedDTO(
+                "1",
                 "1",
                 new Date(1),
                 List.of(new SupplyProductInfo("product", "desc", 1, 100), new SupplyProductInfo("product2", "desc2", 2, 200))
@@ -55,11 +67,11 @@ public class SupplyServiceTest extends AbstractServiceTest<SupplyDocument, Suppl
         SupplyDocument supplyDocument = eSupplier.get();
         supplyDocument.setSummaryCost(null);
         SupplyDocument expectedSupplyDocument = eSupplier.get();
-        SupplyPostPutDTO supplyPostPutDTO = pSupplier.get();
-        given(mockMapper.postPutDTOToEntity(supplyPostPutDTO)).willReturn(supplyDocument);
+        SupplyPostDTO supplyPostDTO = postSupplier.get();
+        given(mockMapper.postDTOToEntity(supplyPostDTO)).willReturn(supplyDocument);
 
         // act
-        service.create(supplyPostPutDTO);
+        service.create(supplyPostDTO);
 
         // assert
         ArgumentCaptor<SupplyDocument> eArgumentCaptor = eArgumentCaptorSupplier.get();

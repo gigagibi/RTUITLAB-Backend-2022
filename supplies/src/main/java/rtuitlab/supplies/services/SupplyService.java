@@ -2,8 +2,8 @@ package rtuitlab.supplies.services;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import rtuitlab.supplies.dto.supply.SupplyGetDTO;
-import rtuitlab.supplies.dto.supply.SupplyPostPutDTO;
+import rtuitlab.supplies.dto.supply.*;
+import rtuitlab.supplies.exceptions.EntityNotFoundException;
 import rtuitlab.supplies.mappers.SupplyMapper;
 import rtuitlab.supplies.models.SupplyProductInfo;
 import rtuitlab.supplies.models.documents.SupplyDocument;
@@ -15,26 +15,28 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class SupplyService extends AbstractService<SupplyDocument, SupplyRepository, SupplyGetDTO, SupplyPostPutDTO, SupplyMapper>{
+public class SupplyService extends AbstractService<SupplyDocument, SupplyRepository, SupplyGetDTO, SupplyPostDTO, SupplyPutDTO, SupplyPostedDTO, SupplyUpdatedDTO, SupplyMapper> {
     public SupplyService(SupplyRepository repository, @Qualifier("supplyMapperImpl") SupplyMapper mapper) {
         super(repository, mapper);
     }
 
     @Override
-    public List<SupplyGetDTO> create(SupplyPostPutDTO supplyPostPutDTO) {
-        SupplyDocument supplyDocument = mapper.postPutDTOToEntity(supplyPostPutDTO);
+    public List<SupplyPostedDTO> create(SupplyPostDTO supplyPostDTO) {
+        SupplyDocument supplyDocument = mapper.postDTOToEntity(supplyPostDTO);
         int summaryCost=0;
         for (SupplyProductInfo supplyProductInfo : supplyDocument.getSupplyProductInfos()){
             summaryCost += supplyProductInfo.getCost() * supplyProductInfo.getAmount();
         }
         supplyDocument.setSummaryCost(summaryCost);
         repository.save(supplyDocument);
-        return repository.findAll().stream().map(mapper::entityToDTO).collect(Collectors.toList());
+        return repository.findAll().stream().map(mapper::entityToPostedDTO).collect(Collectors.toList());
     }
 
     @Override
-    public SupplyGetDTO update(String id, SupplyPostPutDTO supplyPostPutDTO) {
-        SupplyDocument supplyDocument = mapper.postPutDTOToEntity(supplyPostPutDTO);
+    public SupplyUpdatedDTO update(String id, SupplyPutDTO supplyPutDTO) throws EntityNotFoundException {
+        if(!repository.existsById(id))
+            throw new EntityNotFoundException(id);
+        SupplyDocument supplyDocument = mapper.putDTOToEntity(supplyPutDTO);
         supplyDocument.setId(id);
         int summaryCost=0;
         for (SupplyProductInfo supplyProductInfo : supplyDocument.getSupplyProductInfos()){
@@ -42,6 +44,6 @@ public class SupplyService extends AbstractService<SupplyDocument, SupplyReposit
         }
         supplyDocument.setSummaryCost(summaryCost);
         repository.save(supplyDocument);
-        return mapper.entityToDTO(supplyDocument);
+        return mapper.entityToUpdatedDTO(supplyDocument);
     }
 }

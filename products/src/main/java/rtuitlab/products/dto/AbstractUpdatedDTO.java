@@ -1,4 +1,4 @@
-package rtuitlab.products.dto.category;
+package rtuitlab.products.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetCategoryDTO {
-    private Integer id;
-    private String name;
+public abstract class AbstractUpdatedDTO {
+    protected Integer id;
 }

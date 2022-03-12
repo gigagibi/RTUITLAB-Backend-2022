@@ -1,11 +1,12 @@
 package rtuitlab.supplies.mappers;
 
-import org.mapstruct.Mapper;
-import rtuitlab.supplies.dto.AbstractGetDTO;
-import rtuitlab.supplies.dto.AbstractPostPutDTO;
+import rtuitlab.supplies.dto.*;
 import rtuitlab.supplies.models.AbstractDocument;
 
-public interface CommonMapper<E extends AbstractDocument, G extends AbstractGetDTO, P extends AbstractPostPutDTO> {
-    E postPutDTOToEntity(P postPutDTO);
-    G entityToDTO(E entity);
+public interface CommonMapper<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO> {
+    E postDTOToEntity(Post post);
+    E putDTOToEntity(Put put);
+    Get entityToGetDTO(E e);
+    Posted entityToPostedDTO(E e);
+    Updated entityToUpdatedDTO(E e);
 }
