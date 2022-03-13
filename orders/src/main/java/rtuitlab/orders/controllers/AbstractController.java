@@ -1,12 +1,12 @@
-package rtuitlab.supplies.controllers;
+package rtuitlab.orders.controllers;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import rtuitlab.supplies.dto.*;
-import rtuitlab.supplies.exceptions.EntityNotFoundException;
-import rtuitlab.supplies.models.documents.AbstractDocument;
-import rtuitlab.supplies.services.CommonService;
+import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.models.documents.AbstractDocument;
+import rtuitlab.orders.services.CommonService;
+import rtuitlab.orders.dto.*;
 
 import java.util.List;
 

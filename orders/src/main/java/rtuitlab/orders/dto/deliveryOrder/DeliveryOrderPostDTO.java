@@ -1,16 +1,19 @@
 package rtuitlab.orders.dto.deliveryOrder;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import rtuitlab.orders.dto.AbstractPostDTO;
 import rtuitlab.orders.models.BoughtProductInfo;
 
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class PostDeliveryOrderDTO {
+@AllArgsConstructor
+public class DeliveryOrderPostDTO extends AbstractPostDTO {
     private Integer number;
     private List<BoughtProductInfo> products;
     private String address;

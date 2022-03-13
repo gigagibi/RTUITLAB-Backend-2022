@@ -1,19 +1,19 @@
 package rtuitlab.orders.dto.order;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import rtuitlab.orders.dto.AbstractPostDTO;
 import rtuitlab.orders.models.BoughtProductInfo;
 
-import java.time.ZonedDateTime;
-import java.util.Date;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class PutOrderDTO {
+@AllArgsConstructor
+public class OrderPostDTO extends AbstractPostDTO {
     private Integer number;
     private List<BoughtProductInfo> products;
-    private Date orderDate;
 }

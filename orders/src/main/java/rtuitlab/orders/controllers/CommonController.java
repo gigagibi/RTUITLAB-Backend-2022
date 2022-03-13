@@ -1,8 +1,8 @@
-package rtuitlab.supplies.controllers;
+package rtuitlab.orders.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import rtuitlab.supplies.dto.*;
-import rtuitlab.supplies.models.documents.AbstractDocument;
+import rtuitlab.orders.models.documents.AbstractDocument;
+import rtuitlab.orders.dto.*;
 
 import java.util.List;
 

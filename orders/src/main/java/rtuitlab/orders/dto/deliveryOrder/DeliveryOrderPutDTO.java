@@ -1,18 +1,20 @@
 package rtuitlab.orders.dto.deliveryOrder;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import rtuitlab.orders.dto.AbstractPutDTO;
 import rtuitlab.orders.models.BoughtProductInfo;
 
-import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.List;
 
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
-public class PutDeliveryOrderDTO {
+@AllArgsConstructor
+public class DeliveryOrderPutDTO extends AbstractPutDTO {
     private Integer number;
     private List<BoughtProductInfo> products;
     private Date orderDate;

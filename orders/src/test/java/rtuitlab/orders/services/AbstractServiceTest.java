@@ -1,13 +1,12 @@
-package rtuitlab.supplies.services;
+package rtuitlab.orders.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import rtuitlab.supplies.dto.*;
-import rtuitlab.supplies.exceptions.EntityNotFoundException;
-import rtuitlab.supplies.mappers.CommonMapper;
-import rtuitlab.supplies.models.documents.AbstractDocument;
-import rtuitlab.supplies.repositories.CommonRepository;
-
+import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.mappers.CommonMapper;
+import rtuitlab.orders.models.documents.AbstractDocument;
+import rtuitlab.orders.repositories.CommonRepository;
+import rtuitlab.orders.dto.*;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -82,6 +81,7 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, Get extend
         E e = eSupplier.get();
         String id = e.getId();
         given(mockRepository.existsById(id)).willReturn(true);
+        given(mockRepository.findById(id)).willReturn(Optional.of(e));
         Put put = putSupplier.get();
         given(mockMapper.putDTOToEntity(put)).willReturn(e);
 

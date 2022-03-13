@@ -1,27 +1,24 @@
-package rtuitlab.orders.models.documents;
+package rtuitlab.orders.dto.order;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import rtuitlab.orders.dto.AbstractPostedDTO;
 import rtuitlab.orders.models.BoughtProductInfo;
 
 import java.util.Date;
 import java.util.List;
 
-@Document
 @Getter
 @Setter
 @NoArgsConstructor
-public class OrderDocument extends AbstractDocument {
+public class OrderPostedDTO extends AbstractPostedDTO {
     private Integer number;
     private Integer cost;
     private List<BoughtProductInfo> products;
     private Date orderDate;
 
-    public OrderDocument(String id, Integer number, Integer cost, List<BoughtProductInfo> products, Date orderDate) {
+    public OrderPostedDTO(String id, Integer number, Integer cost, List<BoughtProductInfo> products, Date orderDate) {
         super(id);
         this.number = number;
         this.cost = cost;

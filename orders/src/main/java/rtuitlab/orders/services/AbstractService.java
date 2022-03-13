@@ -1,11 +1,12 @@
-package rtuitlab.supplies.services;
+package rtuitlab.orders.services;
 
 import lombok.AllArgsConstructor;
-import rtuitlab.supplies.dto.*;
-import rtuitlab.supplies.exceptions.EntityNotFoundException;
-import rtuitlab.supplies.mappers.CommonMapper;
-import rtuitlab.supplies.models.documents.AbstractDocument;
-import rtuitlab.supplies.repositories.CommonRepository;
+
+import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.mappers.CommonMapper;
+import rtuitlab.orders.models.documents.AbstractDocument;
+import rtuitlab.orders.dto.*;
+import rtuitlab.orders.repositories.CommonRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,7 +39,7 @@ public class AbstractService<E extends AbstractDocument, R extends CommonReposit
         E e = mapper.putDTOToEntity(p);
         e.setId(id);
         repository.save(e);
-        return mapper.entityToUpdatedDTO(repository.findById(id).orElse(null));
+        return mapper.entityToUpdatedDTO(repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
     }
 
     @Override

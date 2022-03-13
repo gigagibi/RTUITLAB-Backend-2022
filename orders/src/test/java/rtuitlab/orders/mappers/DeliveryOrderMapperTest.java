@@ -1,82 +1,63 @@
 package rtuitlab.orders.mappers;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-import rtuitlab.orders.dto.deliveryOrder.GetDeliveryOrderDTO;
-import rtuitlab.orders.dto.deliveryOrder.PostDeliveryOrderDTO;
-import rtuitlab.orders.dto.deliveryOrder.PutDeliveryOrderDTO;
+import rtuitlab.orders.dto.deliveryOrder.*;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.DeliveryOrderDocument;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-class DeliveryOrderMapperTest {
-    private DeliveryOrderMapperImpl underTest;
-
-    private DeliveryOrderDocument testDeliveryOrderDocument;
-    private PostDeliveryOrderDTO testPostDeliveryOrderDTO;
-    private PutDeliveryOrderDTO testPutDeliveryOrderDTO;
-
-    @BeforeEach
-    void setUp() {
-        underTest = new DeliveryOrderMapperImpl();
-        List<BoughtProductInfo> boughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 100, 1),
-                new BoughtProductInfo(2, 200, 2));
-        List<BoughtProductInfo> updatedBoughtProductInfos = Arrays.asList(
-                new BoughtProductInfo(1, 100, 1),
-                new BoughtProductInfo(2, 200, 2));
-        Date date = new Date();
-        testDeliveryOrderDocument = new DeliveryOrderDocument(
+public class DeliveryOrderMapperTest extends AbstractMapperTest<DeliveryOrderDocument, DeliveryOrderGetDTO, DeliveryOrderPostDTO, DeliveryOrderPutDTO, DeliveryOrderPostedDTO, DeliveryOrderUpdatedDTO, DeliveryOrderMapper> {
+    public DeliveryOrderMapperTest() {
+        this.mapper = new DeliveryOrderMapperImpl();
+        this.eSupplier = () -> new DeliveryOrderDocument(
                 "1",
                 1,
-                100,
-                boughtProductInfos,
-                date,
+                300,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                new Date(1),
                 "address",
                 "phone"
         );
-        testPostDeliveryOrderDTO = new PostDeliveryOrderDTO(1,
-                boughtProductInfos, "address", "phone");
-        testPutDeliveryOrderDTO = new PutDeliveryOrderDTO(2,
-                updatedBoughtProductInfos, date, "address_changed", "phone_changed");
-    }
-
-    @Test
-    void shouldConvertPostDTOToEntity() {
-        // arrange (no given arrange)
-
-        // act
-        DeliveryOrderDocument deliveryOrderDocument = underTest.postDTOToEntity(testPostDeliveryOrderDTO);
-
-        // assert
-        assertThat(deliveryOrderDocument.getNumber()).isEqualTo(testPostDeliveryOrderDTO.getNumber());
-        assertThat(deliveryOrderDocument.getAddress()).isEqualTo(testPostDeliveryOrderDTO.getAddress());
-    }
-
-    @Test
-    void shouldConvertEntityToGetDTO() {
-        // arrange (no given arrange)
-
-        // act
-        GetDeliveryOrderDTO getDeliveryOrderDTO = underTest.entityToDTO(testDeliveryOrderDocument);
-
-        // assert
-        assertThat(getDeliveryOrderDTO.getId()).isEqualTo(testDeliveryOrderDocument.getId());
-    }
-
-    @Test
-    void shouldConvertPutDTOToEntity() {
-        DeliveryOrderDocument deliveryOrderDocument = underTest.putDTOToEntity(testPutDeliveryOrderDTO);
-
-        // assert
-        assertThat(deliveryOrderDocument.getNumber()).isEqualTo(testPutDeliveryOrderDTO.getNumber());
-        assertThat(deliveryOrderDocument.getAddress()).isEqualTo(testPutDeliveryOrderDTO.getAddress());
+        this.getSupplier = () -> new DeliveryOrderGetDTO(
+                "1",
+                1,
+                300,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                new Date(1),
+                "address",
+                "phone"
+        );
+        this.postSupplier = () -> new DeliveryOrderPostDTO (
+                1,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                "address",
+                "phone"
+        );
+        this.putSupplier = () -> new DeliveryOrderPutDTO(
+                1,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                new Date(1),
+                "address",
+                "phone"
+        );
+        this.postedSupplier = () -> new DeliveryOrderPostedDTO(
+                "1",
+                1,
+                300,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                new Date(1),
+                "address",
+                "phone"
+        );
+        this.updatedSupplier = () -> new DeliveryOrderUpdatedDTO(
+                "1",
+                1,
+                300,
+                List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
+                new Date(1),
+                "address",
+                "phone"
+        );
     }
 }

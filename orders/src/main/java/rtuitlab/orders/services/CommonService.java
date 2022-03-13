@@ -1,8 +1,8 @@
-package rtuitlab.supplies.services;
+package rtuitlab.orders.services;
 
-import rtuitlab.supplies.dto.*;
-import rtuitlab.supplies.exceptions.EntityNotFoundException;
-import rtuitlab.supplies.models.documents.AbstractDocument;
+import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.models.documents.AbstractDocument;
+import rtuitlab.orders.dto.*;
 
 import java.util.List;
 

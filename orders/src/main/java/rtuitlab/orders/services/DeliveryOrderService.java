@@ -1,20 +1,51 @@
 package rtuitlab.orders.services;
 
-import rtuitlab.orders.dto.deliveryOrder.PostDeliveryOrderDTO;
-import rtuitlab.orders.dto.deliveryOrder.PutDeliveryOrderDTO;
-import rtuitlab.orders.dto.deliveryOrder.GetDeliveryOrderDTO;
-import rtuitlab.orders.exceptions.DeliveryOrderNotFoundException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+import rtuitlab.orders.dto.deliveryOrder.*;
+import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.models.BoughtProductInfo;
+import rtuitlab.orders.models.documents.DeliveryOrderDocument;
+import rtuitlab.orders.repositories.DeliveryOrderRepository;
+import rtuitlab.orders.mappers.DeliveryOrderMapper;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public interface DeliveryOrderService {
-    List<GetDeliveryOrderDTO> getAll();
+@Service
+public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument, DeliveryOrderRepository, DeliveryOrderGetDTO, DeliveryOrderPostDTO, DeliveryOrderPutDTO, DeliveryOrderPostedDTO, DeliveryOrderUpdatedDTO, DeliveryOrderMapper> {
 
-    GetDeliveryOrderDTO getById(String id) throws DeliveryOrderNotFoundException;
+    public DeliveryOrderService(DeliveryOrderRepository repository, @Qualifier("deliveryOrderMapperImpl") DeliveryOrderMapper mapper) {
+        super(repository, mapper);
+    }
 
-    List<GetDeliveryOrderDTO> create(PostDeliveryOrderDTO order);
+    @Override
+    public List<DeliveryOrderPostedDTO> create(DeliveryOrderPostDTO deliveryOrderPostDTO) {
+        DeliveryOrderDocument deliveryOrderDocument = mapper.postDTOToEntity(deliveryOrderPostDTO);
+        int cost = 0;
+        for (BoughtProductInfo boughtProductInfo: deliveryOrderDocument.getProducts()) {
+            cost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+        }
+        deliveryOrderDocument.setCost(cost);
+        deliveryOrderDocument.setOrderDate(new Date());
+        repository.save(deliveryOrderDocument);
+        return repository.findAll().stream().map(mapper::entityToPostedDTO).collect(Collectors.toList());
+    }
 
-    List<GetDeliveryOrderDTO> deleteById(String id) throws DeliveryOrderNotFoundException;
-
-    GetDeliveryOrderDTO update(String id, PutDeliveryOrderDTO order) throws DeliveryOrderNotFoundException;
+    @Override
+    public DeliveryOrderUpdatedDTO update(String id, DeliveryOrderPutDTO deliveryOrderPutDTO) throws EntityNotFoundException {
+        if(!repository.existsById(id))
+            throw new EntityNotFoundException(id);
+        DeliveryOrderDocument deliveryOrderDocument = mapper.putDTOToEntity(deliveryOrderPutDTO);
+        deliveryOrderDocument.setId(id);
+        int cost = 0;
+        for (BoughtProductInfo boughtProductInfo: deliveryOrderDocument.getProducts()) {
+            cost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+        }
+        deliveryOrderDocument.setCost(cost);
+        repository.save(deliveryOrderDocument);
+        DeliveryOrderDocument updatedDeliveryOrderDocument = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        return mapper.entityToUpdatedDTO(updatedDeliveryOrderDocument);
+    }
 }
