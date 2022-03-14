@@ -1,4 +1,4 @@
-package rtuitlab.supplies.services;
+package rtuitlab.supplies.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -7,6 +7,7 @@ import rtuitlab.supplies.exceptions.EntityNotFoundException;
 import rtuitlab.supplies.mappers.CommonMapper;
 import rtuitlab.supplies.models.documents.AbstractDocument;
 import rtuitlab.supplies.repositories.CommonRepository;
+import rtuitlab.supplies.services.CommonService;
 
 import java.util.Optional;
 import java.util.function.Supplier;

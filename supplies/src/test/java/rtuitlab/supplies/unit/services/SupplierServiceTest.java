@@ -1,4 +1,4 @@
-package rtuitlab.supplies.services;
+package rtuitlab.supplies.unit.services;
 
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -6,6 +6,7 @@ import rtuitlab.supplies.dto.supplier.*;
 import rtuitlab.supplies.mappers.SupplierMapper;
 import rtuitlab.supplies.models.documents.SupplierDocument;
 import rtuitlab.supplies.repositories.SupplierRepository;
+import rtuitlab.supplies.services.SupplierService;
 
 public class SupplierServiceTest extends AbstractServiceTest<SupplierDocument, SupplierGetDTO, SupplierPostDTO, SupplierPutDTO, SupplierPostedDTO, SupplierUpdatedDTO, SupplierService, SupplierMapper, SupplierRepository> {
     public SupplierServiceTest() {

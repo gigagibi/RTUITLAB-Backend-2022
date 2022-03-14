@@ -1,4 +1,4 @@
-package rtuitlab.supplies.services;
+package rtuitlab.supplies.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -8,6 +8,7 @@ import rtuitlab.supplies.mappers.SupplyMapper;
 import rtuitlab.supplies.models.SupplyProductInfo;
 import rtuitlab.supplies.models.documents.SupplyDocument;
 import rtuitlab.supplies.repositories.SupplyRepository;
+import rtuitlab.supplies.services.SupplyService;
 
 import java.util.Date;
 import java.util.List;

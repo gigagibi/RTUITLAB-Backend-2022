@@ -1,7 +1,8 @@
-package rtuitlab.supplies.mappers;
+package rtuitlab.supplies.unit.mappers;
 
 import org.junit.jupiter.api.Test;
 import rtuitlab.supplies.dto.*;
+import rtuitlab.supplies.mappers.CommonMapper;
 import rtuitlab.supplies.models.documents.AbstractDocument;
 
 import java.util.function.Supplier;

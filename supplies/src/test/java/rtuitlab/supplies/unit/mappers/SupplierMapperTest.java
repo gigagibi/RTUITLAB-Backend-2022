@@ -1,6 +1,8 @@
-package rtuitlab.supplies.mappers;
+package rtuitlab.supplies.unit.mappers;
 
 import rtuitlab.supplies.dto.supplier.*;
+import rtuitlab.supplies.mappers.SupplierMapper;
+import rtuitlab.supplies.mappers.SupplierMapperImpl;
 import rtuitlab.supplies.models.documents.SupplierDocument;
 
 public class SupplierMapperTest extends AbstractMapperTest<SupplierDocument, SupplierGetDTO, SupplierPostDTO, SupplierPutDTO, SupplierPostedDTO, SupplierUpdatedDTO, SupplierMapper> {
