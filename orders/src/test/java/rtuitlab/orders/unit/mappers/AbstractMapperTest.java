@@ -1,4 +1,4 @@
-package rtuitlab.orders.mappers;
+package rtuitlab.orders.unit.mappers;
 
 import org.junit.jupiter.api.Test;
 import rtuitlab.orders.mappers.CommonMapper;

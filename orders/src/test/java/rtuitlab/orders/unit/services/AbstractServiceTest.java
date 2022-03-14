@@ -1,4 +1,4 @@
-package rtuitlab.orders.services;
+package rtuitlab.orders.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -7,6 +7,8 @@ import rtuitlab.orders.mappers.CommonMapper;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.repositories.CommonRepository;
 import rtuitlab.orders.dto.*;
+import rtuitlab.orders.services.CommonService;
+
 import java.util.Optional;
 import java.util.function.Supplier;
 

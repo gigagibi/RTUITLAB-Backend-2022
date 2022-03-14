@@ -53,6 +53,6 @@ public abstract class AbstractController<E extends AbstractDocument, Get extends
 
     @Override
     public List<Get> deleteAll() {
-        return null;
+        return service.deleteAll();
     }
 }

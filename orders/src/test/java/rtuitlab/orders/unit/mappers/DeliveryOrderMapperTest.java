@@ -1,6 +1,8 @@
-package rtuitlab.orders.mappers;
+package rtuitlab.orders.unit.mappers;
 
 import rtuitlab.orders.dto.deliveryOrder.*;
+import rtuitlab.orders.mappers.DeliveryOrderMapper;
+import rtuitlab.orders.mappers.DeliveryOrderMapperImpl;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.DeliveryOrderDocument;
 

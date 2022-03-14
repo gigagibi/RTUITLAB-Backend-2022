@@ -1,4 +1,4 @@
-package rtuitlab.orders.services;
+package rtuitlab.orders.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -11,6 +11,7 @@ import rtuitlab.orders.mappers.OrderMapper;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.OrderDocument;
 import rtuitlab.orders.repositories.OrderRepository;
+import rtuitlab.orders.services.OrderService;
 
 import java.util.Date;
 import java.util.List;
