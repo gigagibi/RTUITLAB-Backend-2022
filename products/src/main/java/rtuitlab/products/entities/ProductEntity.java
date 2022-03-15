@@ -11,14 +11,8 @@ import javax.persistence.*;
 @Table(name = "product")
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class ProductEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", nullable = false)
-    private Integer id;
-
+public class ProductEntity extends AbstractEntity{
     @Column(name = "name")
     private String name;
 
@@ -33,4 +27,13 @@ public class ProductEntity {
 
     @ManyToOne
     private CategoryEntity categoryEntity;
+
+    public ProductEntity(Integer id, String name, Integer cost, String description, String imagePath, CategoryEntity categoryEntity) {
+        super(id);
+        this.name = name;
+        this.cost = cost;
+        this.description = description;
+        this.imagePath = imagePath;
+        this.categoryEntity = categoryEntity;
+    }
 }

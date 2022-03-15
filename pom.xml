@@ -14,6 +14,7 @@
         <module>eureka</module>
         <module>gateway</module>
         <module>products</module>
+        <module>deliveries</module>
     </modules>
     <build>
         <pluginManagement>

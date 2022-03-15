@@ -1,12 +1,8 @@
 package rtuitlab.supplies.models.documents;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import rtuitlab.supplies.models.AbstractDocument;
 import rtuitlab.supplies.models.SupplyProductInfo;
 
 import java.util.Date;
@@ -28,6 +24,4 @@ public class SupplyDocument extends AbstractDocument {
         this.supplyProductInfos = supplyProductInfos;
         this.summaryCost = summaryCost;
     }
-
-
 }

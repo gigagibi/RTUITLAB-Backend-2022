@@ -14,15 +14,22 @@ import java.util.List;
 @Document
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryOrderDocument {
-    @Id
-    private String id;
+public class DeliveryOrderDocument extends AbstractDocument {
     private Integer number;
     private Integer cost;
     private List<BoughtProductInfo> products;
     private Date orderDate;
     private String address;
     private String phone;
+
+    public DeliveryOrderDocument(String id, Integer number, Integer cost, List<BoughtProductInfo> products, Date orderDate, String address, String phone) {
+        super(id);
+        this.number = number;
+        this.cost = cost;
+        this.products = products;
+        this.orderDate = orderDate;
+        this.address = address;
+        this.phone = phone;
+    }
 }

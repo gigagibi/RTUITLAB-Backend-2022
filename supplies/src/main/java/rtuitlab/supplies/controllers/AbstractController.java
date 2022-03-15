@@ -1,42 +1,58 @@
 package rtuitlab.supplies.controllers;
 
 import lombok.AllArgsConstructor;
-import rtuitlab.supplies.models.AbstractDocument;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import rtuitlab.supplies.dto.*;
+import rtuitlab.supplies.exceptions.EntityNotFoundException;
+import rtuitlab.supplies.models.documents.AbstractDocument;
 import rtuitlab.supplies.services.CommonService;
 
 import java.util.List;
 
 @AllArgsConstructor
-public abstract class AbstractController<E extends AbstractDocument, S extends CommonService<E>> implements CommonController<E> {
+public abstract class AbstractController<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO, S extends CommonService<E, Get, Post, Put, Posted, Updated>> implements CommonController<E, Get, Post, Put, Posted, Updated> {
     protected final S service;
 
     @Override
-    public List<E> getAll() {
+    public List<Get> getAll() {
         return service.getAll();
     }
 
     @Override
-    public E getById(String id) {
-        return service.getById(id);
+    public Get getById(String id) {
+        try {
+            return service.getById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Override
-    public List<E> create(E e) {
-        return service.create(e);
+    public List<Posted> create(Post p) {
+        return service.create(p);
     }
 
     @Override
-    public E update(String id, E e) {
-        return service.update(id, e);
+    public Updated update(String id, Put p) {
+        try {
+            return service.update(id, p);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Override
-    public List<E> deleteById(String id) {
-        return service.deleteById(id);
+    public List<Get> deleteById(String id) {
+        try {
+            return service.deleteById(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @Override
-    public List<E> deleteAll() {
+    public List<Get> deleteAll() {
         return service.deleteAll();
     }
 }

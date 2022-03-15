@@ -1,19 +1,21 @@
 package rtuitlab.supplies.services;
 
-import rtuitlab.supplies.models.AbstractDocument;
+import rtuitlab.supplies.dto.*;
+import rtuitlab.supplies.exceptions.EntityNotFoundException;
+import rtuitlab.supplies.models.documents.AbstractDocument;
 
 import java.util.List;
 
-public interface CommonService<E extends AbstractDocument> {
-    List<E> getAll();
+public interface CommonService<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO> {
+    List<Get> getAll();
 
-    E getById(String id);
+    Get getById(String id) throws EntityNotFoundException;
 
-    List<E> create(E e);
+    List<Posted> create(Post p);
 
-    E update(String id, E e);
+    Updated update(String id, Put p) throws EntityNotFoundException;
 
-    List<E> deleteById(String id);
+    List<Get> deleteById(String id) throws EntityNotFoundException;
 
-    List<E> deleteAll();
+    List<Get> deleteAll();
 }

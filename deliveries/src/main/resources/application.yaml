@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: products
+  jpa:
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    driver-class-name: org.postgresql.Driver
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASORUCE_PASSWORD}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+eureka:
+  client:
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${SPRING_EUREKA_HOST}
+server:
+  port: 3505
+jwt:
+  secret: secret
+rabbitmq:
+  host: localhost
+  port: 5672

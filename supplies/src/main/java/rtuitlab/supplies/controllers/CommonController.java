@@ -1,26 +1,27 @@
 package rtuitlab.supplies.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import rtuitlab.supplies.models.AbstractDocument;
+import rtuitlab.supplies.dto.*;
+import rtuitlab.supplies.models.documents.AbstractDocument;
 
 import java.util.List;
 
-public interface CommonController<E extends AbstractDocument> {
+public interface CommonController<E extends AbstractDocument, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO> {
     @GetMapping("/")
-    List<E> getAll();
+    List<Get> getAll();
 
     @GetMapping("/{id}")
-    E getById(@PathVariable String id);
+    Get getById(@PathVariable String id);
 
     @PostMapping("/")
-    List<E> create(@RequestBody E e);
+    List<Posted> create(@RequestBody Post p);
 
     @PutMapping("/{id}")
-    E update(@PathVariable String id, @RequestBody E e);
+    Updated update(@PathVariable String id, @RequestBody Put p);
 
     @DeleteMapping("/{id}")
-    List<E> deleteById(@PathVariable String id);
+    List<Get> deleteById(@PathVariable String id);
 
     @DeleteMapping("/")
-    List<E> deleteAll();
+    List<Get> deleteAll();
 }
