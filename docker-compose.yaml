@@ -121,7 +121,27 @@ services:
       - orders
       - supplies
       - products
+
+  deliveries_postgres:
+      image: postgres
+      container_name: deliveries_postgres
+      restart: always
+      ports:
+        - "5433:5432"
+      volumes:
+        - deliveries_data:/var/lib/postgresql/data
+      environment:
+        - POSTGRES_USER=postgres
+        - POSTGRES_PASSWORD=root
+        - POSTGRES_DB=rtu_deliveries
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
 volumes:
   orders_data:
   supplies_data:
   products_data:
+  deliveries_data:
