@@ -60,9 +60,20 @@ public class RabbitConfiguration {
     }
 
     @Bean
+    public Queue deliveriesProductsGetAllQueue() {
+        return new Queue("deliveries-products-get-all-queue");
+    }
+
+    @Bean
     @Autowired
     public Binding productsBindingGet(Queue deliveriesProductsGetQueue, DirectExchange productsExchange) {
         return BindingBuilder.bind(deliveriesProductsGetQueue).to(productsExchange).with("products");
+    }
+
+    @Bean
+    @Autowired
+    public Binding productsBindingGetAll(Queue deliveriesProductsGetAllQueue, DirectExchange productsExchange) {
+        return BindingBuilder.bind(deliveriesProductsGetAllQueue).to(productsExchange).with("products-all");
     }
 
     @Bean

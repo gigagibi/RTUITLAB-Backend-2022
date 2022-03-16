@@ -77,7 +77,12 @@ public class ProductService extends AbstractService<ProductEntity, ProductReposi
     @RabbitListener(queues = "deliveries-products-get-queue")
     public ProductToDeliveriesDTO sendProductToDeliveriesResponse(int id) throws EntityNotFoundException {
         ProductEntity productEntity = repository.findById(id).orElse(new ProductEntity(new CategoryEntity()));
-        ProductToDeliveriesDTO product = mapper.entityToDeliveriesDTO(productEntity);
-        return product;
+        return mapper.entityToDeliveriesDTO(productEntity);
+    }
+
+    @RabbitListener(queues = "deliveries-products-get-all-queue")
+    public List<ProductToDeliveriesDTO> sendAllProductsToDeliveriesResponse(String message) {
+        List<ProductEntity> productEntities = repository.findAll();
+        return productEntities.stream().map(mapper::entityToDeliveriesDTO).collect(Collectors.toList());
     }
 }

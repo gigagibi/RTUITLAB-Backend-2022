@@ -12,6 +12,8 @@ import rtuitlab.deliveries.services.DeliveriesService;
 import rtuitlab.deliveries.services.UserService;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/deliveries")
 @AllArgsConstructor
@@ -21,9 +23,14 @@ public class DeliveriesController {
     private final DeliveriesService deliveriesService;
     private final UserService userService;
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/products/{id}")
     public ProductFromProductsRabbitDTO getProduct(@PathVariable int id) {
-        return deliveriesService.getProductFromProducts(id);
+        return deliveriesService.getProductByIdFromProducts(id);
+    }
+
+    @GetMapping("/products")
+    public List<ProductFromProductsRabbitDTO> getProducts() {
+        return deliveriesService.getAllProductsFromProducts();
     }
 
     @PostMapping("/order/")

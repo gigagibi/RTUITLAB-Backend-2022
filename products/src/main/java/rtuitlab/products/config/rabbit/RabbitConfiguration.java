@@ -51,4 +51,9 @@ public class RabbitConfiguration {
         return new Queue("deliveries-products-get-queue");
     }
 
+    @Bean
+    public Queue deliveriesProductsGetAllQueue() {
+        return new Queue("deliveries-products-get-all-queue");
+    }
+
 }
