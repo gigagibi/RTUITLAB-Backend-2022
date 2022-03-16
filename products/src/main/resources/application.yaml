@@ -20,3 +20,5 @@ eureka:
       defaultZone: ${SPRING_EUREKA_HOST}
 server:
   port: 3502
+rabbitmq:
+  host: localhost

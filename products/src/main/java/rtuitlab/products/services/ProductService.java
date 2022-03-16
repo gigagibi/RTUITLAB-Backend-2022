@@ -1,9 +1,11 @@
 package rtuitlab.products.services;
 
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import rtuitlab.products.dto.product.*;
+import rtuitlab.products.dto.rabbit.ProductToDeliveriesDTO;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
 import rtuitlab.products.exception.EntityNotFoundException;
@@ -65,5 +67,12 @@ public class ProductService extends AbstractService<ProductEntity, ProductReposi
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "png", bos );
         return bos.toByteArray();
+    }
+
+    @RabbitListener(queues = "deliveries-products-get-queue")
+    public ProductToDeliveriesDTO sendProductToDeliveriesResponse(int id) throws EntityNotFoundException {
+        ProductEntity productEntity = repository.findById(id).orElse(new ProductEntity(new CategoryEntity()));
+        ProductToDeliveriesDTO product = mapper.entityToDeliveriesDTO(productEntity);
+        return product;
     }
 }

@@ -36,4 +36,8 @@ public class ProductEntity extends AbstractEntity{
         this.imagePath = imagePath;
         this.categoryEntity = categoryEntity;
     }
+
+    public ProductEntity(CategoryEntity categoryEntity) {
+        this.categoryEntity = categoryEntity;
+    }
 }

@@ -1,4 +1,4 @@
-package rtuitlab.deliveries.config.rabbit;
+package rtuitlab.products.config.rabbit;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
@@ -7,13 +7,10 @@ import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
-import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
-@Configuration
 public class RabbitConfiguration {
     @Value("${rabbitmq.host}")
     private String host;
@@ -50,34 +47,8 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public DirectExchange productsExchange() {
-        return new DirectExchange("products-exchange");
-    }
-
-    @Bean
     public Queue deliveriesProductsGetQueue() {
         return new Queue("deliveries-products-get-queue");
     }
 
-    @Bean
-    @Autowired
-    public Binding productsBindingGet(Queue deliveriesProductsGetQueue, DirectExchange productsExchange) {
-        return BindingBuilder.bind(deliveriesProductsGetQueue).to(productsExchange).with("products");
-    }
-
-    @Bean
-    public DirectExchange ordersExchange() {
-        return new DirectExchange("orders-exchange");
-    }
-
-    @Bean
-    public Queue deliveriesOrdersPostQueue() {
-        return new Queue("deliveries-orders-post-queue");
-    }
-
-    @Bean
-    @Autowired
-    public Binding sendOrderRequestBinding(Queue deliveriesOrdersPostQueue, DirectExchange ordersExchange) {
-        return BindingBuilder.bind(deliveriesOrdersPostQueue).to(ordersExchange).with("orders");
-    }
 }

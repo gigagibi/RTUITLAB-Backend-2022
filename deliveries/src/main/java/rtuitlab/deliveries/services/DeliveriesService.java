@@ -1,24 +1,43 @@
 package rtuitlab.deliveries.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.util.concurrent.ListenableFuture;
 import lombok.AllArgsConstructor;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import rtuitlab.deliveries.dto.order.OrderReceiveDTO;
-import rtuitlab.deliveries.dto.order.OrderSendDTO;
-import rtuitlab.deliveries.dto.product.ProductReceiveDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderReceiveFromOrdersDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderSendToOrdersDTO;
+import rtuitlab.deliveries.dto.productRabbit.ProductReceiveFromProductsDTO;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @AllArgsConstructor
 public class DeliveriesService {
-    private final AmqpTemplate amqpTemplate;
+    private final AsyncRabbitTemplate asyncRabbitTemplate;
 
-    public ProductReceiveDTO getProductFromProducts(Integer id) {
-        amqpTemplate.convertAndSend("products-exchange", "products", id);
-        return new ProductReceiveDTO(); //temporary
+    public ProductReceiveFromProductsDTO getProductFromProducts(int id) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProductReceiveFromProductsDTO productReceiveFromProductsDTO = new ProductReceiveFromProductsDTO();
+        ListenableFuture<ProductReceiveFromProductsDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("products-exchange", "products", id, new ParameterizedTypeReference<>() {
+        });
+        try {
+            productReceiveFromProductsDTO = listenableFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return productReceiveFromProductsDTO;
     }
 
-    public OrderReceiveDTO sendOrderToOrders(OrderSendDTO orderSendDTO) {
-        amqpTemplate.convertAndSend("orders-exchange", "orders", orderSendDTO);
-        return new OrderReceiveDTO(); //temporary
+    public OrderReceiveFromOrdersDTO sendOrderToOrders(OrderSendToOrdersDTO orderSendToOrdersDTO) {
+        OrderReceiveFromOrdersDTO orderReceiveFromOrdersDTO = new OrderReceiveFromOrdersDTO();
+        ListenableFuture<OrderReceiveFromOrdersDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("products-exchange", "products", orderSendToOrdersDTO, new ParameterizedTypeReference<>() {
+        });
+        try {
+            orderReceiveFromOrdersDTO = listenableFuture.get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return orderReceiveFromOrdersDTO;
     }
 }

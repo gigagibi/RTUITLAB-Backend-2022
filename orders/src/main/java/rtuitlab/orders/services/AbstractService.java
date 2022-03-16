@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class AbstractService<E extends AbstractDocument, R extends CommonRepository<E>, Get extends AbstractGetDTO, Post extends AbstractPostDTO, Put extends AbstractPutDTO, Posted extends AbstractPostedDTO, Updated extends AbstractUpdatedDTO, M extends CommonMapper<E, Get, Post, Put, Posted, Updated>> implements CommonService<E, Get, Post, Put, Posted, Updated> {
-
     protected final R repository;
     protected final M mapper;
+
     @Override
     public List<Get> getAll() {
         return repository.findAll().stream().map(mapper::entityToGetDTO).collect(Collectors.toList());

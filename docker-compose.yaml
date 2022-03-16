@@ -87,7 +87,7 @@ services:
     container_name: products_postgres
     restart: always
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - products_data:/var/lib/postgresql/data
     environment:
@@ -127,7 +127,7 @@ services:
       container_name: deliveries_postgres
       restart: always
       ports:
-        - "5433:5432"
+        - "5434:5432"
       volumes:
         - deliveries_data:/var/lib/postgresql/data
       environment:

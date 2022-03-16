@@ -1,5 +1,6 @@
 package rtuitlab.deliveries.services;
 
+import com.auth0.jwt.JWT;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,11 @@ public class UserService {
 
     public List<UserInfoDTO> findAll() {
         return userRepository.findAll().stream().map(userEntityMapper::entityToInfoDTO).collect(Collectors.toList());
+    }
+
+    public UserInfoDTO getByToken(String token) {
+        String username = JWT.decode(token.substring(7)).getSubject();
+        UserEntity userEntity = userRepository.getByUsername(username);
+        return userEntityMapper.entityToInfoDTO(userEntity);
     }
 }

@@ -1,4 +1,4 @@
-package rtuitlab.products.config;
+package rtuitlab.products.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
