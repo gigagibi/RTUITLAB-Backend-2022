@@ -57,6 +57,12 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
     @RabbitListener(queues = "deliveries-orders-post-queue")
     public DeliveryOrderToDeliveriesDTO produceDeliveryRequest(DeliveryOrderFromDeliveriesDTO deliveryOrderFromDeliveriesDTO) {
         DeliveryOrderDocument deliveryOrderDocument = mapper.deliveryOrderFromDeliveriesToEntity(deliveryOrderFromDeliveriesDTO);
+        int cost = 0;
+        for (BoughtProductInfo boughtProductInfo: deliveryOrderDocument.getProducts()) {
+            cost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+        }
+        deliveryOrderDocument.setCost(cost);
+        deliveryOrderDocument.setOrderDate(new Date());
         repository.save(deliveryOrderDocument);
         return mapper.entityToDeliveryOrderToDeliveries(deliveryOrderDocument);
     }
