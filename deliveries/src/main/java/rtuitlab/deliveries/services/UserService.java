@@ -9,10 +9,12 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import rtuitlab.deliveries.dto.user.*;
+import rtuitlab.deliveries.entities.RoleEntity;
 import rtuitlab.deliveries.entities.UserEntity;
 import rtuitlab.deliveries.exceptions.EntityNotFoundException;
 import rtuitlab.deliveries.exceptions.InvalidCredentialsException;
 import rtuitlab.deliveries.mappers.UserEntityMapper;
+import rtuitlab.deliveries.repositories.RoleRepository;
 import rtuitlab.deliveries.repositories.UserRepository;
 
 import java.util.List;
@@ -23,12 +25,14 @@ public class UserService {
     private UserRepository userRepository;
     private UserEntityMapper userEntityMapper;
     private PasswordEncoder passwordEncoder;
+    private RoleRepository roleRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, UserEntityMapper userEntityMapper, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, UserEntityMapper userEntityMapper, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.userEntityMapper = userEntityMapper;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Value("${jwt.secret}")
@@ -37,6 +41,8 @@ public class UserService {
     public UserInfoDTO register(UserRegisterDTO userRegisterDTO) {
         userRegisterDTO.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
         UserEntity userEntity = userEntityMapper.registerDTOToEntity(userRegisterDTO);
+        RoleEntity roleEntity = roleRepository.findByName("ROLE_USER");
+        userEntity.setRole(roleEntity);
         userRepository.save(userEntity);
         return userEntityMapper.entityToInfoDTO(userEntity);
     }
