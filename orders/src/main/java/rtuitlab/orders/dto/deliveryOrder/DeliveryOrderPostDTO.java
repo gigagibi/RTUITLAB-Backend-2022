@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryOrderPostDTO extends AbstractPostDTO {
-    private Integer number;
     private List<BoughtProductInfo> products;
     private String address;
     private String phone;

@@ -2,9 +2,7 @@ package rtuitlab.orders.services;
 
 import lombok.AllArgsConstructor;
 
-import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
-import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.mappers.CommonMapper;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.dto.*;
@@ -29,13 +27,13 @@ public abstract class AbstractService<E extends AbstractDocument, R extends Comm
     }
 
     @Override
-    public List<Posted> create(Post p) throws EntityCreateErrorException {
+    public List<Posted> create(Post p) {
         repository.save(mapper.postDTOToEntity(p));
         return repository.findAll().stream().map(mapper::entityToPostedDTO).collect(Collectors.toList());
     }
 
     @Override
-    public Updated update(String id, Put p) throws EntityNotFoundException, EntityUpdateErrorException {
+    public Updated update(String id, Put p) throws EntityNotFoundException {
         if(!repository.existsById(id))
             throw new EntityNotFoundException(id);
         E e = mapper.putDTOToEntity(p);

@@ -15,7 +15,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class OrderPutDTO extends AbstractPutDTO {
-    private Integer number;
     private List<BoughtProductInfo> products;
     private Date orderDate;
 }

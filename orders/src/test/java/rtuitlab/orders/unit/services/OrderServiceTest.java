@@ -3,6 +3,7 @@ package rtuitlab.orders.unit.services;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.web.client.RestTemplate;
 import rtuitlab.orders.dto.order.OrderPostDTO;
 import rtuitlab.orders.dto.order.OrderPutDTO;
 import rtuitlab.orders.dto.order.*;
@@ -22,12 +23,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 public class OrderServiceTest extends AbstractServiceTest<OrderDocument, OrderGetDTO, OrderPostDTO, OrderPutDTO, OrderPostedDTO, OrderUpdatedDTO, OrderService, OrderMapper, OrderRepository> {
+    private final RestTemplate mockRestTemplate;
     public OrderServiceTest() {
         OrderRepository OrderMockRepository = Mockito.mock(OrderRepository.class);
         OrderMapper OrderMockMapper = Mockito.mock(OrderMapper.class);
+        this.mockRestTemplate = Mockito.mock(RestTemplate.class);
         this.mockRepository = OrderMockRepository;
         this.mockMapper = OrderMockMapper;
-        this.service = new OrderService(OrderMockRepository, OrderMockMapper);
+        this.service = new OrderService(OrderMockRepository, OrderMockMapper, this.mockRestTemplate);
         this.eSupplier = () -> new OrderDocument(
                 "1",
                 1,
@@ -43,11 +46,9 @@ public class OrderServiceTest extends AbstractServiceTest<OrderDocument, OrderGe
                 new Date(1)
         );
         this.postSupplier = () -> new OrderPostDTO (
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2))
         );
         this.putSupplier = () -> new OrderPutDTO(
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 new Date(1)
         );

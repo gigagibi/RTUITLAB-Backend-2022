@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class DeliveryOrderFromDeliveriesRabbitDTO implements Serializable {
-    private Integer number;
     private List<BoughtProductInfo> products;
     private String address;
     private String phone;

@@ -5,9 +5,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.web.client.RestTemplate;
 import rtuitlab.orders.dto.deliveryOrder.*;
-import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
-import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.mappers.DeliveryOrderMapper;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.DeliveryOrderDocument;
@@ -50,13 +48,11 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
                 "phone"
         );
         this.postSupplier = () -> new DeliveryOrderPostDTO (
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 "address",
                 "phone"
         );
         this.putSupplier = () -> new DeliveryOrderPutDTO(
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 new Date(1),
                 "address",
@@ -84,7 +80,7 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
     }
 
     @Test
-    void shouldCorrectlyComputeCost_WhenCreatingDeliveryOrder() throws EntityCreateErrorException {
+    void shouldCorrectlyComputeCost_WhenCreatingDeliveryOrder()  {
         // arrange
          DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
          DeliveryOrderDocument expectedDeliveryOrderDocument = eSupplier.get();
@@ -103,7 +99,7 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
     }
 
     @Test
-    void shouldCorrectlyComputeCost_WhenUpdatingDeliveryOrder() throws EntityNotFoundException, EntityUpdateErrorException {
+    void shouldCorrectlyComputeCost_WhenUpdatingDeliveryOrder() throws EntityNotFoundException {
         // arrange
         DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
         String id = deliveryOrderDocument.getId();

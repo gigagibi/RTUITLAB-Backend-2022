@@ -31,11 +31,9 @@ public class OrderControllerTest extends AbstractControllerTest<OrderDocument, O
                 new Date(1)
         );
         this.postSupplier = () -> new OrderPostDTO(
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2))
         );
         this.putSupplier = () -> new OrderPutDTO(
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 new Date(1)
         );

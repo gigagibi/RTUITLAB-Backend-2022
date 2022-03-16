@@ -31,13 +31,11 @@ public class DeliveryOrderMapperTest extends AbstractMapperTest<DeliveryOrderDoc
                 "phone"
         );
         this.postSupplier = () -> new DeliveryOrderPostDTO (
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 "address",
                 "phone"
         );
         this.putSupplier = () -> new DeliveryOrderPutDTO(
-                1,
                 List.of(new BoughtProductInfo(1, 100, 1), new BoughtProductInfo(2, 100, 2)),
                 new Date(1),
                 "address",

@@ -14,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderFromOrdersRabbitDTO implements Serializable {
-    private Integer number;
     private Integer cost;
     private List<BoughtProductInfo> products;
     private Date orderDate;

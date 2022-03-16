@@ -3,9 +3,7 @@ package rtuitlab.orders.controllers;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
-import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
-import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.services.CommonService;
 import rtuitlab.orders.dto.*;
@@ -31,7 +29,7 @@ public abstract class AbstractController<E extends AbstractDocument, Get extends
     }
 
     @Override
-    public List<Posted> create(Post p) throws EntityCreateErrorException {
+    public List<Posted> create(Post p) {
         return service.create(p);
     }
 
@@ -39,7 +37,7 @@ public abstract class AbstractController<E extends AbstractDocument, Get extends
     public Updated update(String id, Put p) {
         try {
             return service.update(id, p);
-        } catch (EntityNotFoundException | EntityUpdateErrorException e) {
+        } catch (EntityNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
         }
     }

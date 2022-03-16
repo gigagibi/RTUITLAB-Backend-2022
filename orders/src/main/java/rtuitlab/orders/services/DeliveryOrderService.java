@@ -11,9 +11,8 @@ import org.springframework.web.client.RestTemplate;
 import rtuitlab.orders.dto.deliveryOrder.*;
 import rtuitlab.orders.dto.deliveryOrder.rabbit.DeliveryOrderFromDeliveriesRabbitDTO;
 import rtuitlab.orders.dto.deliveryOrder.rabbit.DeliveryOrderToDeliveriesRabbitDTO;
-import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
-import rtuitlab.orders.exceptions.EntityUpdateErrorException;
+import rtuitlab.orders.exceptions.ProductToDeliveriesNotFound;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.DeliveryOrderDocument;
 import rtuitlab.orders.repositories.DeliveryOrderRepository;
@@ -21,6 +20,7 @@ import rtuitlab.orders.mappers.DeliveryOrderMapper;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,7 +34,7 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
     }
 
     @Override
-    public List<DeliveryOrderPostedDTO> create(DeliveryOrderPostDTO deliveryOrderPostDTO) throws EntityCreateErrorException {
+    public List<DeliveryOrderPostedDTO> create(DeliveryOrderPostDTO deliveryOrderPostDTO) {
         DeliveryOrderDocument deliveryOrderDocument = mapper.postDTOToEntity(deliveryOrderPostDTO);
         int summaryCost = 0;
         for (BoughtProductInfo boughtProductInfo: deliveryOrderDocument.getProducts()) {
@@ -43,18 +43,21 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
                     "http://products/api/v1/products/" + productId + "/cost",
                     Integer.class);
             if (productCostEntity.getStatusCode()==HttpStatus.NOT_FOUND)
-                throw new EntityCreateErrorException();
-            boughtProductInfo.setCost(productCostEntity.getBody());
-            summaryCost += productCostEntity.getBody() * boughtProductInfo.getAmount();
+                summaryCost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+            else {
+                boughtProductInfo.setCost(productCostEntity.getBody());
+                summaryCost += productCostEntity.getBody() * boughtProductInfo.getAmount();
+            }
         }
         deliveryOrderDocument.setCost(summaryCost);
         deliveryOrderDocument.setOrderDate(new Date());
+        deliveryOrderDocument.setNumber(findMaxOrderNumber()+1);
         repository.save(deliveryOrderDocument);
         return repository.findAll().stream().map(mapper::entityToPostedDTO).collect(Collectors.toList());
     }
 
     @Override
-    public DeliveryOrderUpdatedDTO update(String id, DeliveryOrderPutDTO deliveryOrderPutDTO) throws EntityNotFoundException, EntityUpdateErrorException {
+    public DeliveryOrderUpdatedDTO update(String id, DeliveryOrderPutDTO deliveryOrderPutDTO) throws EntityNotFoundException {
         if(!repository.existsById(id)) {
             throw new EntityNotFoundException(id);
         }
@@ -68,19 +71,22 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
                     "http://products/api/v1/products/" + productId + "/cost",
                     Integer.class);
             if (productCostEntity.getStatusCode()==HttpStatus.NOT_FOUND)
-                throw new EntityUpdateErrorException();
-            boughtProductInfo.setCost(productCostEntity.getBody());
-            summaryCost += productCostEntity.getBody() * boughtProductInfo.getAmount();
+                summaryCost += boughtProductInfo.getCost() * boughtProductInfo.getAmount();
+            else {
+                boughtProductInfo.setCost(productCostEntity.getBody());
+                summaryCost += productCostEntity.getBody() * boughtProductInfo.getAmount();
+            }
         }
 
         deliveryOrderDocument.setCost(summaryCost);
+        deliveryOrderDocument.setNumber(getNumberOfOrderById(id));
         repository.save(deliveryOrderDocument);
         DeliveryOrderDocument updatedDeliveryOrderDocument = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
         return mapper.entityToUpdatedDTO(updatedDeliveryOrderDocument);
     }
 
     @RabbitListener(queues = "deliveries-orders-post-queue")
-    public DeliveryOrderToDeliveriesRabbitDTO produceDeliveryRequest(DeliveryOrderFromDeliveriesRabbitDTO deliveryOrderFromDeliveriesRabbitDTO) throws EntityCreateErrorException {
+    public DeliveryOrderToDeliveriesRabbitDTO produceDeliveryRequest(DeliveryOrderFromDeliveriesRabbitDTO deliveryOrderFromDeliveriesRabbitDTO) throws ProductToDeliveriesNotFound {
         int summaryCost = 0;
         for (BoughtProductInfo boughtProductInfo : deliveryOrderFromDeliveriesRabbitDTO.getProducts()) {
             int productId = boughtProductInfo.getId();
@@ -88,15 +94,30 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
                     "http://products/api/v1/products/" + productId + "/cost",
                     Integer.class);
             if(productCostEntity.getStatusCode()== HttpStatus.NOT_FOUND)
-                throw new EntityCreateErrorException();
+                throw new ProductToDeliveriesNotFound(productId);
             boughtProductInfo.setCost(productCostEntity.getBody());
             summaryCost += productCostEntity.getBody() * boughtProductInfo.getAmount();
         }
         DeliveryOrderDocument deliveryOrderDocument = mapper.deliveryOrderFromDeliveriesToEntity(deliveryOrderFromDeliveriesRabbitDTO);
         deliveryOrderDocument.setCost(summaryCost);
         deliveryOrderDocument.setOrderDate(new Date());
+        deliveryOrderDocument.setNumber(findMaxOrderNumber()+1);
         repository.save(deliveryOrderDocument);
         DeliveryOrderToDeliveriesRabbitDTO dto =mapper.entityToDeliveryOrderToDeliveries(deliveryOrderDocument);
         return dto;
     }
+
+    private int findMaxOrderNumber() {
+        List<DeliveryOrderDocument> orders = repository.findAll();
+        Optional<DeliveryOrderDocument> optional = orders.stream().reduce((a, b) -> a.getNumber() > b.getNumber() ? a : b);
+        if(optional.isPresent())
+            return optional.get().getNumber();
+        else
+            return 0;
+    }
+
+    private int getNumberOfOrderById(String id) throws EntityNotFoundException {
+        return repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id)).getNumber();
+    }
+
 }
