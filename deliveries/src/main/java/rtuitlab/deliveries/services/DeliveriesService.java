@@ -44,7 +44,13 @@ public class DeliveriesService {
         return productsFromProductsRabbitDTO;
     }
 
-    public OrderFromOrdersRabbitDTO sendOrderToOrders(OrderToOrdersRabbitDTO orderToOrdersRabbitDTO) {
+    public OrderFromOrdersRabbitDTO sendOrderToOrders(String myAddress, String myPhone, OrderToOrdersRabbitDTO orderToOrdersRabbitDTO) {
+        if(orderToOrdersRabbitDTO.getAddress().equals("my")) {
+            orderToOrdersRabbitDTO.setAddress(myAddress);
+        }
+        if(orderToOrdersRabbitDTO.getPhone().equals("my")) {
+            orderToOrdersRabbitDTO.setPhone(myPhone);
+        }
         OrderFromOrdersRabbitDTO orderFromOrdersRabbitDTO = new OrderFromOrdersRabbitDTO();
         ListenableFuture<OrderFromOrdersRabbitDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("orders-exchange", "orders", orderToOrdersRabbitDTO, new ParameterizedTypeReference<>() {
         });

@@ -36,8 +36,6 @@ public class DeliveriesController {
     @PostMapping("/order/")
     public OrderFromOrdersRabbitDTO sendOrder(@ApiIgnore @RequestHeader("Authorization") String token, @RequestBody OrderToOrdersRabbitDTO orderToOrdersRabbitDTO) {
         UserInfoDTO userInfoDTO = userService.getByToken(token);
-        orderToOrdersRabbitDTO.setAddress(userInfoDTO.getAddress());
-        orderToOrdersRabbitDTO.setPhone(userInfoDTO.getPhone());
-        return deliveriesService.sendOrderToOrders(orderToOrdersRabbitDTO);
+        return deliveriesService.sendOrderToOrders(userInfoDTO.getAddress(), userInfoDTO.getPhone(), orderToOrdersRabbitDTO);
     }
 }
