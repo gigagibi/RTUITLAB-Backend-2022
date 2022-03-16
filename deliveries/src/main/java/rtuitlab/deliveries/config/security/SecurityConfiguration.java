@@ -21,6 +21,12 @@ import rtuitlab.deliveries.services.CustomUserDetailsService;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private CustomUserDetailsService userDetailsService;
 
+    private static final String[] AUTH_WHITELIST = {
+            "/api/v1/auth/**",
+            "/swagger-resources/**",
+            "/swagger-ui/**"
+    };
+
     @Autowired
     public SecurityConfiguration(CustomUserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -36,11 +42,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                .antMatcher("/*")
                 .authorizeRequests()
-                .anyRequest()
-                .permitAll();
-//                .addFilterBefore(new JwtFilter(authenticationManager(), jwtSecret), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/api/v1/deliveries/**")
+                .authenticated()
+                .antMatchers(AUTH_WHITELIST)
+                .permitAll()
+                .and()
+                .addFilterBefore(new JwtFilter(userDetailsService, jwtSecret), UsernamePasswordAuthenticationFilter.class);
     }
 
     @Override

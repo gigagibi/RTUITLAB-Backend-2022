@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import rtuitlab.orders.models.BoughtProductInfo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryOrderToDeliveriesDTO {
+public class DeliveryOrderToDeliveriesDTO implements Serializable {
     private Integer number;
     private Integer cost;
     private List<BoughtProductInfo> products;

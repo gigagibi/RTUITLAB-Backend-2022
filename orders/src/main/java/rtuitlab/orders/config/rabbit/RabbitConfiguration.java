@@ -1,4 +1,4 @@
-package rtuitlab.orders.config;
+package rtuitlab.orders.config.rabbit;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
@@ -23,11 +23,6 @@ public class RabbitConfiguration {
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jackson2MessageConverter() {
-        return new Jackson2JsonMessageConverter();
-    }
-
-    @Bean
     @Autowired
     public AmqpAdmin amqpAdmin(ConnectionFactory connectionFactory) {
         return new RabbitAdmin(connectionFactory);
@@ -35,9 +30,9 @@ public class RabbitConfiguration {
 
     @Bean
     @Autowired
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, Jackson2JsonMessageConverter jackson2MessageConverter) {
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory, CustomJacksonMessageConverter customJacksonMessageConverter) {
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jackson2MessageConverter);
+        rabbitTemplate.setMessageConverter(customJacksonMessageConverter);
         return rabbitTemplate;
     }
 

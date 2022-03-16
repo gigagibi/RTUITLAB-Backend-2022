@@ -1,4 +1,4 @@
-package rtuitlab.orders.config;
+package rtuitlab.orders.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +18,7 @@ public class SwaggerConfiguration {
     @Bean
     public Docket api() {
         Contact contact = new Contact(
-                "Mirea student",
+                "It's me bro",
                 "",
                 "chel@gmail.com");
 
