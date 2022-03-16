@@ -103,8 +103,7 @@ public class DeliveryOrderService extends AbstractService<DeliveryOrderDocument,
         deliveryOrderDocument.setOrderDate(new Date());
         deliveryOrderDocument.setNumber(findMaxOrderNumber()+1);
         repository.save(deliveryOrderDocument);
-        DeliveryOrderToDeliveriesRabbitDTO dto =mapper.entityToDeliveryOrderToDeliveries(deliveryOrderDocument);
-        return dto;
+        return mapper.entityToDeliveryOrderToDeliveries(deliveryOrderDocument);
     }
 
     private int findMaxOrderNumber() {

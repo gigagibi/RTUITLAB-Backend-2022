@@ -72,6 +72,24 @@ public class UserService {
             return userLoginResponseDTO;
         }
         else throw new InvalidCredentialsException();
+    }
 
+    public List<UserEntity> create(UserEntity userEntity) {
+        userRepository.save(userEntity);
+        return userRepository.findAll();
+    }
+
+    public List<UserEntity> getAll() {
+        return userRepository.findAll();
+    }
+
+    public List<UserEntity> deleteById(int id) {
+        userRepository.deleteById(id);
+        return userRepository.findAll();
+    }
+
+    public List<UserEntity> deleteAll() {
+        userRepository.deleteAll();
+        return userRepository.findAll();
     }
 }
