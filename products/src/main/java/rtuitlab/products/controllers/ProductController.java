@@ -18,6 +18,15 @@ public class ProductController extends AbstractController<ProductEntity, Product
         super(service);
     }
 
+    @GetMapping("/{id}/cost")
+    public int getProductCost(@PathVariable int id) {
+        try {
+            return service.getProductCost(id);
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
+
     @GetMapping("/{id}/image")
     public byte[] getProductImage(@PathVariable int id) {
         try {

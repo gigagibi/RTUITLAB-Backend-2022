@@ -1,6 +1,8 @@
 package rtuitlab.orders.services;
 
+import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.dto.*;
 
@@ -11,9 +13,9 @@ public interface CommonService<E extends AbstractDocument, Get extends AbstractG
 
     Get getById(String id) throws EntityNotFoundException;
 
-    List<Posted> create(Post p);
+    List<Posted> create(Post p) throws EntityCreateErrorException;
 
-    Updated update(String id, Put p) throws EntityNotFoundException;
+    Updated update(String id, Put p) throws EntityNotFoundException, EntityUpdateErrorException;
 
     List<Get> deleteById(String id) throws EntityNotFoundException;
 

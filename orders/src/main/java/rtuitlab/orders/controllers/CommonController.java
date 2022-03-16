@@ -1,6 +1,7 @@
 package rtuitlab.orders.controllers;
 
 import org.springframework.web.bind.annotation.*;
+import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.dto.*;
 
@@ -14,7 +15,7 @@ public interface CommonController<E extends AbstractDocument, Get extends Abstra
     Get getById(@PathVariable String id);
 
     @PostMapping("/")
-    List<Posted> create(@RequestBody Post p);
+    List<Posted> create(@RequestBody Post p) throws EntityCreateErrorException;
 
     @PutMapping("/{id}")
     Updated update(@PathVariable String id, @RequestBody Put p);

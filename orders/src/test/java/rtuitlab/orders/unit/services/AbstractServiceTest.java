@@ -2,7 +2,9 @@ package rtuitlab.orders.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
+import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.mappers.CommonMapper;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.repositories.CommonRepository;
@@ -61,7 +63,7 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, Get extend
     }
 
     @Test
-    void shouldCreate() {
+    void shouldCreate() throws EntityCreateErrorException {
         // arrange (no given arrange)
         E e = eSupplier.get();
         Post post = postSupplier.get();
@@ -78,7 +80,7 @@ public abstract class AbstractServiceTest<E extends AbstractDocument, Get extend
     }
 
     @Test
-    void shouldUpdate() throws EntityNotFoundException {
+    void shouldUpdate() throws EntityNotFoundException, EntityUpdateErrorException {
         // arrange
         E e = eSupplier.get();
         String id = e.getId();

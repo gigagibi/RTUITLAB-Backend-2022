@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import rtuitlab.products.dto.product.*;
-import rtuitlab.products.dto.rabbit.ProductToDeliveriesDTO;
+import rtuitlab.products.dto.productRabbit.ProductToDeliveriesDTO;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
 import rtuitlab.products.exception.EntityNotFoundException;
@@ -67,6 +67,11 @@ public class ProductService extends AbstractService<ProductEntity, ProductReposi
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ImageIO.write(bImage, "png", bos );
         return bos.toByteArray();
+    }
+
+    public int getProductCost(int id) throws EntityNotFoundException {
+        ProductEntity productEntity = repository.findById(id).orElseThrow(() -> new EntityNotFoundException(id));
+        return productEntity.getCost();
     }
 
     @RabbitListener(queues = "deliveries-products-get-queue")

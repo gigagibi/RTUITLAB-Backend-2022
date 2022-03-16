@@ -11,10 +11,7 @@ import java.io.Serializable;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductReceiveFromProductsDTO implements Serializable {
+public class CategoryFromProductsRabbitDTO implements Serializable {
     private Integer id;
     private String name;
-    private Integer cost;
-    private String description;
-    private CategoryReceiveFromProductsDTO category;
 }

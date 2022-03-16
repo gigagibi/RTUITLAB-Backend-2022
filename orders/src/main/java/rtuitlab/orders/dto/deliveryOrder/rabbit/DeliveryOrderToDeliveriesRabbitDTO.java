@@ -1,4 +1,4 @@
-package rtuitlab.orders.dto.rabbit;
+package rtuitlab.orders.dto.deliveryOrder.rabbit;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeliveryOrderToDeliveriesDTO implements Serializable {
+public class DeliveryOrderToDeliveriesRabbitDTO implements Serializable {
     private Integer number;
     private Integer cost;
     private List<BoughtProductInfo> products;

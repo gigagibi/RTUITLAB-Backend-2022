@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderToOrdersDTO implements Serializable {
+public class OrderToOrdersRabbitDTO implements Serializable {
     private Integer number;
     private List<BoughtProductInfo> products;
     private String address;

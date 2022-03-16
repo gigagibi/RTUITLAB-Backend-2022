@@ -3,7 +3,9 @@ package rtuitlab.orders.unit.controllers;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import rtuitlab.orders.controllers.AbstractController;
+import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.models.documents.AbstractDocument;
 import rtuitlab.orders.dto.*;
 import rtuitlab.orders.services.CommonService;
@@ -55,7 +57,7 @@ public class AbstractControllerTest<E extends AbstractDocument, Get extends Abst
     }
 
     @Test
-    void shouldCreate() {
+    void shouldCreate() throws EntityCreateErrorException {
         // arrange
         Post post = postSupplier.get();
 
@@ -70,7 +72,7 @@ public class AbstractControllerTest<E extends AbstractDocument, Get extends Abst
     }
 
     @Test
-    void shouldUpdateById() throws EntityNotFoundException {
+    void shouldUpdateById() throws EntityNotFoundException, EntityUpdateErrorException {
         // arrange
         Put put = putSupplier.get();
         String id = "1";

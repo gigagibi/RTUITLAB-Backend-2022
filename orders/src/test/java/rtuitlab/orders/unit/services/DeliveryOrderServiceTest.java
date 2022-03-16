@@ -3,8 +3,11 @@ package rtuitlab.orders.unit.services;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.web.client.RestTemplate;
 import rtuitlab.orders.dto.deliveryOrder.*;
+import rtuitlab.orders.exceptions.EntityCreateErrorException;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
+import rtuitlab.orders.exceptions.EntityUpdateErrorException;
 import rtuitlab.orders.mappers.DeliveryOrderMapper;
 import rtuitlab.orders.models.BoughtProductInfo;
 import rtuitlab.orders.models.documents.DeliveryOrderDocument;
@@ -20,12 +23,14 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderDocument, DeliveryOrderGetDTO, DeliveryOrderPostDTO, DeliveryOrderPutDTO, DeliveryOrderPostedDTO, DeliveryOrderUpdatedDTO, DeliveryOrderService, DeliveryOrderMapper, DeliveryOrderRepository> {
+    private final RestTemplate mockRestTemplate;
     public DeliveryOrderServiceTest() {
         DeliveryOrderRepository deliveryOrderMockRepository = Mockito.mock(DeliveryOrderRepository.class);
         DeliveryOrderMapper deliveryOrderMockMapper = Mockito.mock(DeliveryOrderMapper.class);
         this.mockRepository = deliveryOrderMockRepository;
         this.mockMapper = deliveryOrderMockMapper;
-        this.service = new DeliveryOrderService(deliveryOrderMockRepository, deliveryOrderMockMapper);
+        this.mockRestTemplate = Mockito.mock(RestTemplate.class);
+        this.service = new DeliveryOrderService(deliveryOrderMockRepository, deliveryOrderMockMapper, mockRestTemplate);
         this.eSupplier = () -> new DeliveryOrderDocument(
                 "1",
                 1,
@@ -79,7 +84,7 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
     }
 
     @Test
-    void shouldCorrectlyComputeCost_WhenCreatingDeliveryOrder() {
+    void shouldCorrectlyComputeCost_WhenCreatingDeliveryOrder() throws EntityCreateErrorException {
         // arrange
          DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
          DeliveryOrderDocument expectedDeliveryOrderDocument = eSupplier.get();
@@ -98,9 +103,8 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
     }
 
     @Test
-    void shouldCorrectlyComputeCost_WhenUpdatingDeliveryOrder() throws EntityNotFoundException {
+    void shouldCorrectlyComputeCost_WhenUpdatingDeliveryOrder() throws EntityNotFoundException, EntityUpdateErrorException {
         // arrange
-
         DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
         String id = deliveryOrderDocument.getId();
         DeliveryOrderDocument expectedDeliveryOrderDocument = eSupplier.get();

@@ -1,9 +1,10 @@
-package rtuitlab.products.dto.rabbit;
+package rtuitlab.products.dto.productRabbit;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import rtuitlab.products.dto.categoryRabbit.CategoryToDeliveriesDTO;
 
 import java.io.Serializable;
 

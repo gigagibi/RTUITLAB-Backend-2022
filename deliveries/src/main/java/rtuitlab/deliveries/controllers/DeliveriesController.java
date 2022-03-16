@@ -4,9 +4,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.web.bind.annotation.*;
-import rtuitlab.deliveries.dto.orderRabbit.OrderFromOrdersDTO;
-import rtuitlab.deliveries.dto.orderRabbit.OrderToOrdersDTO;
-import rtuitlab.deliveries.dto.productRabbit.ProductReceiveFromProductsDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderFromOrdersRabbitDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderToOrdersRabbitDTO;
+import rtuitlab.deliveries.dto.productRabbit.ProductFromProductsRabbitDTO;
 import rtuitlab.deliveries.dto.user.UserInfoDTO;
 import rtuitlab.deliveries.services.DeliveriesService;
 import rtuitlab.deliveries.services.UserService;
@@ -22,15 +22,15 @@ public class DeliveriesController {
     private final UserService userService;
 
     @GetMapping("/product/{id}")
-    public ProductReceiveFromProductsDTO getProduct(@PathVariable int id) {
+    public ProductFromProductsRabbitDTO getProduct(@PathVariable int id) {
         return deliveriesService.getProductFromProducts(id);
     }
 
     @PostMapping("/order/")
-    public OrderFromOrdersDTO sendOrder(@ApiIgnore @RequestHeader("Authorization") String token, @RequestBody OrderToOrdersDTO orderToOrdersDTO) {
+    public OrderFromOrdersRabbitDTO sendOrder(@ApiIgnore @RequestHeader("Authorization") String token, @RequestBody OrderToOrdersRabbitDTO orderToOrdersRabbitDTO) {
         UserInfoDTO userInfoDTO = userService.getByToken(token);
-        orderToOrdersDTO.setAddress(userInfoDTO.getAddress());
-        orderToOrdersDTO.setPhone(userInfoDTO.getPhone());
-        return deliveriesService.sendOrderToOrders(orderToOrdersDTO);
+        orderToOrdersRabbitDTO.setAddress(userInfoDTO.getAddress());
+        orderToOrdersRabbitDTO.setPhone(userInfoDTO.getPhone());
+        return deliveriesService.sendOrderToOrders(orderToOrdersRabbitDTO);
     }
 }

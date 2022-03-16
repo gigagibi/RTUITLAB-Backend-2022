@@ -6,9 +6,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.amqp.rabbit.AsyncRabbitTemplate;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
-import rtuitlab.deliveries.dto.orderRabbit.OrderFromOrdersDTO;
-import rtuitlab.deliveries.dto.orderRabbit.OrderToOrdersDTO;
-import rtuitlab.deliveries.dto.productRabbit.ProductReceiveFromProductsDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderFromOrdersRabbitDTO;
+import rtuitlab.deliveries.dto.orderRabbit.OrderToOrdersRabbitDTO;
+import rtuitlab.deliveries.dto.productRabbit.ProductFromProductsRabbitDTO;
 import java.util.concurrent.ExecutionException;
 
 @Service
@@ -16,28 +16,28 @@ import java.util.concurrent.ExecutionException;
 public class DeliveriesService {
     private final AsyncRabbitTemplate asyncRabbitTemplate;
 
-    public ProductReceiveFromProductsDTO getProductFromProducts(int id) {
+    public ProductFromProductsRabbitDTO getProductFromProducts(int id) {
         ObjectMapper objectMapper = new ObjectMapper();
-        ProductReceiveFromProductsDTO productReceiveFromProductsDTO = new ProductReceiveFromProductsDTO();
-        ListenableFuture<ProductReceiveFromProductsDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("products-exchange", "products", id, new ParameterizedTypeReference<>() {
+        ProductFromProductsRabbitDTO productFromProductsRabbitDTO = new ProductFromProductsRabbitDTO();
+        ListenableFuture<ProductFromProductsRabbitDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("products-exchange", "products", id, new ParameterizedTypeReference<>() {
         });
         try {
-            productReceiveFromProductsDTO = listenableFuture.get();
+            productFromProductsRabbitDTO = listenableFuture.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return productReceiveFromProductsDTO;
+        return productFromProductsRabbitDTO;
     }
 
-    public OrderFromOrdersDTO sendOrderToOrders(OrderToOrdersDTO orderToOrdersDTO) {
-        OrderFromOrdersDTO orderFromOrdersDTO = new OrderFromOrdersDTO();
-        ListenableFuture<OrderFromOrdersDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("orders-exchange", "orders", orderToOrdersDTO, new ParameterizedTypeReference<>() {
+    public OrderFromOrdersRabbitDTO sendOrderToOrders(OrderToOrdersRabbitDTO orderToOrdersRabbitDTO) {
+        OrderFromOrdersRabbitDTO orderFromOrdersRabbitDTO = new OrderFromOrdersRabbitDTO();
+        ListenableFuture<OrderFromOrdersRabbitDTO> listenableFuture = asyncRabbitTemplate.convertSendAndReceiveAsType("orders-exchange", "orders", orderToOrdersRabbitDTO, new ParameterizedTypeReference<>() {
         });
         try {
-            orderFromOrdersDTO = listenableFuture.get();
+            orderFromOrdersRabbitDTO = listenableFuture.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
-        return orderFromOrdersDTO;
+        return orderFromOrdersRabbitDTO;
     }
 }
