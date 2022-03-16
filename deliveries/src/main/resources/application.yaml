@@ -1,6 +1,6 @@
 spring:
   application:
-    name: products
+    name: deliveries
   jpa:
     hibernate:
       ddl-auto: update
