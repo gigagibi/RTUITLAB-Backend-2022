@@ -11,8 +11,7 @@ import rtuitlab.products.mapper.CategoryMapperImpl;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-class CategoryMapperTest extends AbstractMapperTest<CategoryEntity, CategoryGetDTO, CategoryPostDTO, CategoryPutDTO, CategoryPostedDTO, CategoryUpdatedDTO, CategoryMapper> {
-
+public class CategoryMapperTest extends AbstractMapperTest<CategoryEntity, CategoryGetDTO, CategoryPostDTO, CategoryPutDTO, CategoryPostedDTO, CategoryUpdatedDTO, CategoryMapper> {
     public CategoryMapperTest() {
         this.mapper = new CategoryMapperImpl();
         this.eSupplier = () -> new CategoryEntity(

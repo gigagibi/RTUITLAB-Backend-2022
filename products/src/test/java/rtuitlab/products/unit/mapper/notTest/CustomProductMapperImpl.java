@@ -1,11 +1,9 @@
 package rtuitlab.products.unit.mapper.notTest;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import rtuitlab.products.dto.product.*;
 import rtuitlab.products.dto.productRabbit.ProductToDeliveriesDTO;
 import rtuitlab.products.entities.ProductEntity;
 import rtuitlab.products.mapper.CategoryMapper;
-import rtuitlab.products.mapper.CategoryMapperImpl;
 import rtuitlab.products.mapper.ProductMapper;
 
 public class CustomProductMapperImpl implements ProductMapper {

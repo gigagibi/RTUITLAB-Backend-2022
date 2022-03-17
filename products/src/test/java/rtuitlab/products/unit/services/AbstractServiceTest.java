@@ -1,4 +1,4 @@
-package rtuitlab.products.unit.services.jpaImpl;
+package rtuitlab.products.unit.services;
 
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

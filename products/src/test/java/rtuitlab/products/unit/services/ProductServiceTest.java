@@ -1,11 +1,8 @@
-package rtuitlab.products.unit.services.jpaImpl;
+package rtuitlab.products.unit.services;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import rtuitlab.products.dto.category.CategoryGetDTO;
@@ -13,11 +10,9 @@ import rtuitlab.products.dto.product.*;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
 import rtuitlab.products.exception.EntityNotFoundException;
-import rtuitlab.products.mapper.CategoryMapper;
 import rtuitlab.products.mapper.ProductMapper;
 import rtuitlab.products.repositories.CategoryRepository;
 import rtuitlab.products.repositories.ProductRepository;
-import rtuitlab.products.services.CategoryService;
 import rtuitlab.products.services.ProductService;
 
 import java.util.List;
@@ -29,7 +24,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceTest extends AbstractServiceTest<ProductEntity, ProductGetDTO, ProductPostDTO, ProductPutDTO, ProductPostedDTO, ProductUpdatedDTO, ProductService, ProductMapper, ProductRepository> {
+public class ProductServiceTest extends AbstractServiceTest<ProductEntity, ProductGetDTO, ProductPostDTO, ProductPutDTO, ProductPostedDTO, ProductUpdatedDTO, ProductService, ProductMapper, ProductRepository> {
     private final CategoryRepository mockCategoryRepository;
     private final Supplier<CategoryEntity> categorySupplier;
     public ProductServiceTest() {
