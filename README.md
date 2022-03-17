@@ -30,7 +30,9 @@ Project is service-oriented, includes 6 services:
 5. Supplies service (used for managing supplies)
 6. Deliveries service (backend of website that can be used by clients for making remote delivery orders)
 
-![пиццерия](https://user-images.githubusercontent.com/70891118/158795510-24c5dee0-032c-4b9d-a068-d33a2857fb1d.png)
+![пиццерия 2](https://user-images.githubusercontent.com/70891118/158809965-46e7ee59-3f7a-48bf-b637-6874d4ed4dc0.png)
+
+Project uses maven build system, and each service is a child maven module of parent project
 
 ## Default users in deliveries service
 ### Admin
