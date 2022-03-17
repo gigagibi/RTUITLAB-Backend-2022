@@ -21,4 +21,4 @@ eureka:
 server:
   port: 3502
 rabbitmq:
-  host: localhost
+  host: ${RABBITMQ_HOST}

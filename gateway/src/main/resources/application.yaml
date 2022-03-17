@@ -12,14 +12,18 @@ spring:
         uri: http://orders
         predicates:
           - Path=/orders
+      - id: products
+        uri: http://products
+        predicates:
+          - Path=/products
       - id: supplies
         uri: http://supplies
         predicates:
           - Path=/supplies
-      - id: menu
-        uri: http://menu
+      - id: deliveries
+        uri: http://deliveries
         predicates:
-          - Path=/menu
+          - Path=/deliveries
 server:
   port: 3500
 eureka:

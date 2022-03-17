@@ -21,7 +21,7 @@ eureka:
 server:
   port: 3505
 jwt:
-  secret: secret
+  secret: ${JWT_SECRET}
 rabbitmq:
-  host: localhost
+  host: ${RABBITMQ_HOST}
   port: 5672

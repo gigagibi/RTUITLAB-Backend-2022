@@ -18,19 +18,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
-  orders_mongo_express:
-    image: mongo-express
-    container_name: orders_mongo_express
-    restart: always
-    depends_on:
-      - orders_mongodb
-    ports:
-      - "8081:8081"
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-      - ME_CONFIG_MONGODB_SERVER=orders_mongodb
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
   orders:
     image: gigagibi/rtuitlab-2022-orders
     container_name: orders
@@ -40,9 +27,12 @@ services:
     depends_on:
       - orders_mongodb
       - eureka
+      - rabbitmq
+      - products
     environment:
       - SPRING_MONGO_URI=mongodb://root:root@orders_mongodb:27017/rtu_orders?authSource=admin
       - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+      - RABBITMQ_HOST=rabbitmq
 
   supplies_mongodb:
     image: mongo
@@ -55,20 +45,6 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
-  supplies_mongo_express:
-    image: mongo-express
-    container_name: supplies_mongo_express
-    restart: always
-    depends_on:
-      - supplies_mongodb
-    ports:
-      - "8082:8081"
-    environment:
-      - ME_CONFIG_MONGODB_ADMINUSERNAME=root
-      - ME_CONFIG_MONGODB_ADMINPASSWORD=root
-      - ME_CONFIG_MONGODB_SERVER=supplies_mongodb
-      - ME_CONFIG_MONGODB_ENABLE_ADMIN=true
-      - ME_CONFIG_MONGODB_PORT=27017
   supplies:
     image: gigagibi/rtuitlab-2022-supplies
     container_name: supplies
@@ -103,11 +79,14 @@ services:
     depends_on:
       - products_postgresdb
       - eureka
+      - rabbitmq
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://products_postgresdb:5432/rtu_products
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root
       - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+      - RABBITMQ_HOST=rabbitmq
+
   gateway:
     image: gigagibi/rtuitlab-2022-gateway
     container_name: gateway
@@ -121,6 +100,7 @@ services:
       - orders
       - supplies
       - products
+      - deliveries
 
   deliveries_postgres:
       image: postgres
@@ -135,6 +115,23 @@ services:
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=root
         - POSTGRES_DB=rtu_deliveries
+  deliveries:
+    image: gigagibi/rtuitlab-2022-deliveries
+    container_name: deliveries
+    ports:
+      - "3505:3505"
+    depends_on:
+      - deliveries_postgres
+      - eureka
+      - rabbitmq
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://deliveries_postgres:5432/rtu_deliveries
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_EUREKA_HOST=http://eureka:8761/eureka
+      - JWT_SECRET=secret
+      - RABBITMQ_HOST=rabbitmq
+
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq
