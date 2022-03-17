@@ -61,20 +61,8 @@ ALTER TABLE public.user_entity OWNER TO postgres;
 -- Data for Name: role_entity; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.role_entity (id, name) FROM stdin;
-1       ROLE_ADMIN
-2       ROLE_USER
-\.
 
 
---
--- Data for Name: user_entity; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.user_entity (id, address, name, password, phone, surname, username, role_id) FROM stdin;
-4       admin   admin   $2a$12$pc.CTKzA/NCun7js4rHTquYr2gqom5POIhwktIIJEtzYDEpHoa9Ma    admin   admin   admin   1
-5       user    user    $2a$12$svTL90A8w.o5RgHZMsR3eeeQO4vaEEDJuUpcO7r2crTFvCsmg.PMy    user    user    user    2
-\.
 
 
 --
@@ -107,6 +95,17 @@ ALTER TABLE ONLY public.user_entity
 ALTER TABLE ONLY public.user_entity
     ADD CONSTRAINT fkc50fb2m5pqs8711tbas2jljlu FOREIGN KEY (role_id) REFERENCES public.role_entity(id);
 
+
+INSERT INTO
+    public.role_entity
+values
+    (1, 'ROLE_ADMIN'),
+    (2, 'ROLE_USER');
+INSERT INTO
+    public.user_entity
+values
+    (1, 'admin', 'admin', '$2a$12$pc.CTKzA/NCun7js4rHTquYr2gqom5POIhwktIIJEtzYDEpHoa9Ma', 'admin', 'admin', 'admin', 1),
+    (2, 'user', 'user', '$2a$12$svTL90A8w.o5RgHZMsR3eeeQO4vaEEDJuUpcO7r2crTFvCsmg.PMy', 'user', 'user', 'user', 2);
 
 --
 -- PostgreSQL database dump complete
