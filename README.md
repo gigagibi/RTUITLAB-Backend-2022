@@ -42,7 +42,13 @@ Password: ```user```
 
 
 ## API
-Swagger UI is available at the url: http://{service_hostname}:{service_port}/swagger-ui/#/
+Gateway routes:
+- products: http://{gateway_host}:{gateway_port}/products
+- orders: http://{gateway_host}:{gateway_port}/orders
+- supplies: http://{gateway_host}:{gateway_port}/supplies
+- deliveries: http://{gateway_host}:{gateway_port}/deliveries
+
+Swagger UI is available at the url: http://{service_host}:{service_port}/swagger-ui/#/
 
 Default admin's jwt token for swagger: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwicm9sZXMiOlsiUk9MRV9VU0VSIl19.ffAE6hrHk7gJrVG7otX07gVSjHI50UxxIokNVW84ba0
 
