@@ -129,6 +129,7 @@ services:
       ports:
         - "5434:5432"
       volumes:
+        - ./deliveries/src/main/docker/init.sql:/docker-entrypoint-initdb.d/init.sql
         - deliveries_data:/var/lib/postgresql/data
       environment:
         - POSTGRES_USER=postgres

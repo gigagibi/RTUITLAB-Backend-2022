@@ -1,21 +1,24 @@
 package rtuitlab.products.unit.mapper;
 
 import org.mockito.Mockito;
+import org.springframework.context.annotation.Bean;
 import rtuitlab.products.dto.category.*;
 import rtuitlab.products.dto.product.*;
 import rtuitlab.products.entities.CategoryEntity;
 import rtuitlab.products.entities.ProductEntity;
+import rtuitlab.products.mapper.CategoryMapper;
+import rtuitlab.products.mapper.CategoryMapperImpl;
 import rtuitlab.products.mapper.ProductMapper;
 import rtuitlab.products.mapper.ProductMapperImpl;
+import rtuitlab.products.unit.mapper.notTest.CustomProductMapperImpl;
 
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class ProductMapperTest extends AbstractMapperTest<ProductEntity, ProductGetDTO, ProductPostDTO, ProductPutDTO, ProductPostedDTO, ProductUpdatedDTO, ProductMapper> {
-    private Supplier<CategoryEntity> categorySupplier;
-    public ProductMapperTest() {
-        this.mapper = new ProductMapperImpl();
+   public ProductMapperTest() {
+        this.mapper = new CustomProductMapperImpl(new CategoryMapperImpl());
         this.eSupplier = () -> new ProductEntity(
                 1,
                 "name",

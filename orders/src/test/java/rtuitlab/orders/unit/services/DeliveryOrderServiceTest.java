@@ -3,6 +3,8 @@ package rtuitlab.orders.unit.services;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 import rtuitlab.orders.dto.deliveryOrder.*;
 import rtuitlab.orders.exceptions.EntityNotFoundException;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
@@ -80,6 +83,53 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
     }
 
     @Test
+    @Override
+    void shouldCreate() {
+        DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
+        DeliveryOrderPostDTO post = postSupplier.get();
+        given(mockMapper.postDTOToEntity(post)).willReturn(deliveryOrderDocument);
+        for(BoughtProductInfo productInfo: deliveryOrderDocument.getProducts()) {
+            given(mockRestTemplate.getForEntity(
+                    "http://products/api/v1/products/" + productInfo.getId() + "/cost",
+                    Integer.class)).willReturn(new ResponseEntity<>(productInfo.getCost(), HttpStatus.OK));
+        }
+
+        // act
+        service.create(post);
+
+        // assert
+        ArgumentCaptor<DeliveryOrderDocument> eArgumentCaptor = eArgumentCaptorSupplier.get();
+        verify(mockRepository).save(eArgumentCaptor.capture());
+        DeliveryOrderDocument captured = eArgumentCaptor.getValue();
+        assertThat(captured).isEqualTo(deliveryOrderDocument);
+    }
+
+    @Test
+    @Override
+    void shouldUpdate() throws EntityNotFoundException {
+        DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
+        String id = deliveryOrderDocument.getId();
+        given(mockRepository.existsById(id)).willReturn(true);
+        given(mockRepository.findById(id)).willReturn(Optional.of(deliveryOrderDocument));
+        DeliveryOrderPutDTO put = putSupplier.get();
+        given(mockMapper.putDTOToEntity(put)).willReturn(deliveryOrderDocument);
+        for(BoughtProductInfo productInfo: deliveryOrderDocument.getProducts()) {
+            given(mockRestTemplate.getForEntity(
+                    "http://products/api/v1/products/" + productInfo.getId() + "/cost",
+                    Integer.class)).willReturn(new ResponseEntity<>(productInfo.getCost(), HttpStatus.OK));
+        }
+
+        // act
+        service.update(id, put);
+
+        // assert
+        ArgumentCaptor<DeliveryOrderDocument> eArgumentCaptor = eArgumentCaptorSupplier.get();
+        verify(mockRepository).save(eArgumentCaptor.capture());
+        DeliveryOrderDocument captured = eArgumentCaptor.getValue();
+        assertThat(id).isEqualTo(captured.getId());
+    }
+
+    @Test
     void shouldCorrectlyComputeCost_WhenCreatingDeliveryOrder()  {
         // arrange
          DeliveryOrderDocument deliveryOrderDocument = eSupplier.get();
@@ -87,7 +137,11 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
          deliveryOrderDocument.setCost(null);
          DeliveryOrderPostDTO deliveryOrderPostDTO = postSupplier.get();
          given(mockMapper.postDTOToEntity(deliveryOrderPostDTO)).willReturn(deliveryOrderDocument);
-
+         for(BoughtProductInfo productInfo: deliveryOrderDocument.getProducts()) {
+             given(mockRestTemplate.getForEntity(
+                     "http://products/api/v1/products/" + productInfo.getId() + "/cost",
+                     Integer.class)).willReturn(new ResponseEntity<>(productInfo.getCost(), HttpStatus.OK));
+         }
          // act
         service.create(deliveryOrderPostDTO);
 
@@ -109,7 +163,11 @@ public class DeliveryOrderServiceTest extends AbstractServiceTest<DeliveryOrderD
         given(mockRepository.existsById(id)).willReturn(true);
         given(mockRepository.findById(id)).willReturn(Optional.of(deliveryOrderDocument));
         given(mockMapper.putDTOToEntity(deliveryOrderPutDTO)).willReturn(deliveryOrderDocument);
-
+        for(BoughtProductInfo productInfo: deliveryOrderDocument.getProducts()) {
+            given(mockRestTemplate.getForEntity(
+                    "http://products/api/v1/products/" + productInfo.getId() + "/cost",
+                    Integer.class)).willReturn(new ResponseEntity<>(productInfo.getCost(), HttpStatus.OK));
+        }
         // act
         service.update(id, deliveryOrderPutDTO);
 
