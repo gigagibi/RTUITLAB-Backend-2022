@@ -47,14 +47,6 @@ public class UserService {
         return userEntityMapper.entityToInfoDTO(userEntity);
     }
 
-    public UserInfoDTO update(int id, UserUpdateDTO userUpdateDTO) throws EntityNotFoundException {
-        userUpdateDTO.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
-        UserEntity userEntity = userEntityMapper.updateDTOToEntity(userUpdateDTO);
-        userEntity.setId(id);
-        userRepository.save(userEntity);
-        return userEntityMapper.entityToInfoDTO(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(id)));
-    }
-
     public List<UserInfoDTO> findAll() {
         return userRepository.findAll().stream().map(userEntityMapper::entityToInfoDTO).collect(Collectors.toList());
     }
@@ -66,7 +58,7 @@ public class UserService {
     }
 
     public UserLoginResponseDTO authorize(UserLoginDTO userLoginDTO) throws InvalidCredentialsException {
-        UserLoginResponseDTO userLoginResponseDTO = null;
+        UserLoginResponseDTO userLoginResponseDTO;
         String username = userLoginDTO.getUsername();
         String password = userLoginDTO.getPassword();
         UserEntity userEntity = userRepository.getByUsername(username);

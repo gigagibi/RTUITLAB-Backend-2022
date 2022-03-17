@@ -13,11 +13,11 @@
           <entry name="$MAVEN_REPOSITORY$/org/mapstruct/mapstruct/1.4.2.Final/mapstruct-1.4.2.Final.jar" />
         </processorPath>
         <module name="orders" />
-        <module name="supplies" />
-        <module name="gateway" />
         <module name="eureka" />
-        <module name="deliveries" />
+        <module name="gateway" />
+        <module name="supplies" />
         <module name="products" />
+        <module name="deliveries" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
