@@ -12,9 +12,11 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import rtuitlab.deliveries.dto.user.UserLoginDTO;
+import rtuitlab.deliveries.dto.user.UserLoginResponseDTO;
 import rtuitlab.deliveries.dto.user.UserRegisterDTO;
 import rtuitlab.deliveries.entities.RoleEntity;
 import rtuitlab.deliveries.entities.UserEntity;
+import rtuitlab.deliveries.exceptions.InvalidCredentialsException;
 import rtuitlab.deliveries.mappers.UserEntityMapper;
 import rtuitlab.deliveries.repositories.RoleRepository;
 import rtuitlab.deliveries.repositories.UserRepository;
@@ -41,13 +43,13 @@ class UserServiceTest {
 
     @BeforeEach
     public void setUp() {
-        this.userService = new UserService(mockRepository, mockMapper, passwordEncoder, roleRepository);
         this.passwordEncoder = new BCryptPasswordEncoder();
         this.userService = new UserService(mockRepository, mockMapper, passwordEncoder, roleRepository);
+        this.userService.setJwtSecret("secret");
         this.userEntitySupplier = () -> new UserEntity(
                 1,
                 "user",
-                "user",
+                "$2a$10$H6WtDuCC7kztAyq93YRSEOnQLpVIH19NXH2maV3dWJV3tbFS.sCHe",
                 new RoleEntity(1, "ROLE_USER"),
                 "user",
                 "user",
@@ -79,8 +81,7 @@ class UserServiceTest {
         // arrange
         UserRegisterDTO userRegisterDTO = registerDTOSupplier.get();
         UserEntity userEntity = userEntitySupplier.get();
-        String expectedPassword = userEntity.getPassword();
-        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
+        String expectedPassword = userRegisterDTO.getPassword();
         given(mockMapper.registerDTOToEntity(userRegisterDTO)).willReturn(userEntity);
         given(roleRepository.findByName("ROLE_USER")).willReturn(userRoleSupplier.get());
 
@@ -115,23 +116,70 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldAuthorizeUser() {
+    void shouldAuthorizeUser() throws InvalidCredentialsException {
+        // arrange
+        UserLoginDTO userLoginDTO = loginDTOSupplier.get();
+        UserEntity userEntity = userEntitySupplier.get();
+        given(mockRepository.getByUsername(userLoginDTO.getUsername()))
+                .willReturn(userEntity);
 
+        // act
+        UserLoginResponseDTO userLoginResponseDTO = userService.authorize(userLoginDTO);
+
+        // assert
+        String decodedFromJWTUsername = JWT.decode(userLoginResponseDTO.getToken()).getSubject();
+        assertThat(decodedFromJWTUsername).isEqualTo(userLoginDTO.getUsername());
     }
 
     @Test
     void shouldGetAllUsers() {
+        // arrange (no given arrange)
+
+        // act
+        userService.getAll();
+
+        // assert
+        verify(mockRepository).findAll();
     }
 
     @Test
     void shouldCreateUser() {
+        // arrange
+        UserEntity userEntity = userEntitySupplier.get();
+
+        // act
+        userService.create(userEntity);
+
+        // assert
+        ArgumentCaptor<UserEntity> userEntityArgumentCaptor = ArgumentCaptor.forClass(UserEntity.class);
+        verify(mockRepository).save(userEntityArgumentCaptor.capture());
+        UserEntity captured = userEntityArgumentCaptor.getValue();
+        assertThat(captured).isEqualTo(userEntity);
     }
 
     @Test
-    void should() {
+    void shouldDeleteById() {
+        // arrange
+        int id = userEntitySupplier.get().getId();
+
+        // act
+        userService.deleteById(id);
+
+        // assert
+        ArgumentCaptor<Integer> idArgumentCaptor = ArgumentCaptor.forClass(Integer.class);
+        verify(mockRepository).deleteById(idArgumentCaptor.capture());
+        int captured = idArgumentCaptor.getValue();
+        assertThat(captured).isEqualTo(id);
     }
 
     @Test
     void deleteAll() {
+        // arrange (no given arrange)
+
+        // act
+        userService.deleteAll();
+
+        // assert
+        verify(mockRepository).deleteAll();
     }
 }
