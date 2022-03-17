@@ -44,6 +44,7 @@ public class ProductService extends AbstractService<ProductEntity, ProductReposi
         if(!repository.existsById(id))
             throw new EntityNotFoundException(id);
         ProductEntity productEntity = mapper.putDTOToEntity(productPutDTO);
+        productEntity.setCategoryEntity(categoryRepository.getById(productPutDTO.getCategoryId()));
         productEntity.setId(id);
         repository.save(productEntity);
         return mapper.entityToUpdatedDTO(repository.getById(id));
