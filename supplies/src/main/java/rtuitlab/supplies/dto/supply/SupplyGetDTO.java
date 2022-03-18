@@ -1,17 +1,17 @@
 package rtuitlab.supplies.dto.supply;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.*;
 import rtuitlab.supplies.dto.AbstractGetDTO;
 import rtuitlab.supplies.models.SupplyProductInfo;
 
 import java.util.Date;
 import java.util.List;
 
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class SupplyGetDTO extends AbstractGetDTO {
     private String supplier_id;
     private Date supplyDate;

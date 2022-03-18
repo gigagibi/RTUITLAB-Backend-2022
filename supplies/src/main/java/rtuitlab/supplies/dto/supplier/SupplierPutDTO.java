@@ -1,15 +1,12 @@
 package rtuitlab.supplies.dto.supplier;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import rtuitlab.supplies.dto.AbstractPutDTO;
 
-@Getter
-@Setter
-@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class SupplierPutDTO extends AbstractPutDTO {
     private String name;
     private String address;
