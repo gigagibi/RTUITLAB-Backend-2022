@@ -1,6 +1,5 @@
 package rtuitlab.supplies.integration.controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import rtuitlab.supplies.controllers.SupplierController;
