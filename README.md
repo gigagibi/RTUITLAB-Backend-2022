@@ -22,6 +22,7 @@ In root directory:
 docker-compose up -d
 ```
 ## Project structure
+### Services
 Project is service-oriented, includes 6 services:
 1. Eureka service (spring discovery service)
 2. Gateway service
@@ -30,9 +31,16 @@ Project is service-oriented, includes 6 services:
 5. Supplies service (used for managing supplies)
 6. Deliveries service (backend of website that can be used by clients for making remote delivery orders)
 
-![пиццерия 2](https://user-images.githubusercontent.com/70891118/158998290-9c5b1760-adb0-4175-a35d-dfc1aff2c7eb.png)
-
 Project uses maven build system, and each service is a child maven module of parent project
+
+![пиццерия](https://user-images.githubusercontent.com/70891118/159545499-aea53d60-808d-406e-a152-e7037f9a11d2.png)
+
+**Backend interaction scenarios**
+
+1. Visitor can make order through the website, self-service machine or cashier. Cashier uses **cash register** which interacts with **products** service to get info about products, and **orders** service to insert order's details. Visitor can also make an order by himself using **self-service machine**, which is also interacts with **orders** and **products** services. Also, he can remotely make an order throgh **client application** (web or mobile) which interacts with **deliveries** service
+2. Supplies manager can insert, edit, delete and get information about supplies through **client application** which interacts with **supplies** service
+3. Also, there are two **monitor sets** - one of them displays cooked orders numbers (placed in the hall), and the other one displays information about received orders (placed in the kitchen), both interact with **orders** service
+4. All interactions are performed through the **gateway** service
 
 ## Default users in deliveries service
 ### Admin
